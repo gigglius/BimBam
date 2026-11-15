@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
         TextView logo = label("ROBLOX", 25, true);
         logo.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
         header.addView(logo, new LinearLayout.LayoutParams(0, -1, 1));
-        TextView money = label("R$ 22     ◆ 100", 16, true);
+        TextView money = label("R$ 0     ◆ 100", 16, true);
         money.setGravity(Gravity.CENTER);
         header.addView(money);
 
@@ -130,11 +130,11 @@ public class MainActivity extends Activity {
         avatar.setBackground(bg(Color.rgb(34,111,185), Color.rgb(145,197,239)));
         profile.addView(avatar, new LinearLayout.LayoutParams(-1, 0, 1.1f));
 
-        TextView name = label("1Ezra", 20, true);
+        TextView name = label("1234", 20, true);
         name.setGravity(Gravity.CENTER);
         profile.addView(name, new LinearLayout.LayoutParams(-1, dp(38)));
 
-        TextView balances = label("R$ 22     TIX 100", 14, true);
+        TextView balances = label("R$ 0     TIX 100", 14, true);
         balances.setGravity(Gravity.CENTER);
         balances.setBackground(bg(Color.rgb(12,58,119), 0));
         profile.addView(balances, new LinearLayout.LayoutParams(-1, dp(34)));
