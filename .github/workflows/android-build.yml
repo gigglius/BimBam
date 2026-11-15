@@ -30,11 +30,12 @@ jobs:
           gradle-version: '8.11.1'
 
       - name: Build debug APK
+        working-directory: quest-roblox-vr
         run: gradle assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: roblox-2014-vr-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: quest-roblox-vr/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
