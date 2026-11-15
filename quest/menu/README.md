@@ -1,20 +1,31 @@
-# Quest 3 menu foundation
+# Original Roblox menu preservation
 
-First platform-independent menu implementation for the Roblox 2014 Quest port.
+## Decision
 
-## Menu screens
-- Main: Play, Avatar, Settings, Quit
-- Settings: comfort and turning option entry points, Back
-- Avatar: default-avatar entry point, Back
-- Controller pointer hover and trigger edge detection
+Use the menu already implemented in the 2014 Roblox native engine. Do not replace it with a newly designed Quest menu.
 
-## Interaction coordinates
-The menu is designed as a world-space panel. Its local coordinates are normalized to -0.5 through +0.5 on each axis. QuestMenu performs button hit testing and detects trigger presses on the down edge.
+## Evidence in the uploaded APK
 
-An OpenXR input adapter should read the right controller aim pose, transform its ray into panel-local space, intersect the panel plane, then pass the local x/y and trigger state to updatePointer(). The renderer should draw buttons() and highlight hoveredButton().
+The original `lib/armeabi/libroblox.so` contains these menu-related strings and symbols:
 
-## Integration status
-This is the menu state and interaction foundation, not yet a rendered in-headset panel. Rendering must be connected to the engine UI/render path after the graphics-context integration is established. StartGame should invoke the preserved original place-launch flow. Quit should be mapped to the Android activity lifecycle, not native process termination.
+- `N3RBX10TopMenuBarE` — native Roblox `RBX::TopMenuBar` type.
+- `ChatMenuPanel` — native chat/menu UI panel.
+- `PlaceFilter_EnableAndroidMenuLeave` and `EnableAndroidMenuLeave` — place-filter setting controlling the Android leave-menu behavior.
+- `N3RBX13LeaveGameVerbE` — native leave-game verb.
+- `menuState == SHOWN_APPEARING`, `menuState == HOVER`, and `menuState == NOTHING` — menu state diagnostics from `Client/App/gui/GUI.cpp`.
 
-## Build
-Add QuestMenu.cpp to the native target that owns the Quest client. The implementation is C++11 and has no OpenXR or Android header dependency.
+These are evidence that the APK has its own native in-game GUI/menu system. The Android launcher layouts (for example `activity_native_main.xml`) are separate from this in-game menu.
+
+## Quest integration direction
+
+1. Preserve the original `RBX::TopMenuBar` and associated native GUI implementation.
+2. Keep its existing visual assets, layout, labels, and menu behavior.
+3. Adapt Quest controller input to the original GUI input/hit-testing path rather than drawing a replacement menu.
+4. Route the Quest system/menu button to the existing native menu-open/back behavior, investigating `nativeHandleBackPressed()` and the engine's Android menu-leave setting.
+5. Keep menu rendering on the preserved engine GUI renderer; the OpenXR graphics bridge should change frame presentation and stereo camera handling, not replace the menu.
+
+## Current limitation
+
+The uploaded APK contains a stripped native binary, not the original C++ source. The strings above identify the native menu components and settings, but they do not reveal a callable public C++ API for opening the menu or injecting controller pointer events. Those call paths must be traced in the binary before implementing the Quest input adapter.
+
+No replacement menu implementation belongs in this folder.
