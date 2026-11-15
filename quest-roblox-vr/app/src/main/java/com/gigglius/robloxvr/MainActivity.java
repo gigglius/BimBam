@@ -2,6 +2,8 @@ package com.gigglius.robloxvr;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -145,14 +148,20 @@ public class MainActivity extends Activity {
                 {"Groups", "◉", "Communities"},
                 {"Leaderboards", "★", "Top players"}
             };
-            for (String[] item : items) {
+            Bitmap originalMenuIcons = BitmapFactory.decodeResource(
+                    getResources(), R.drawable.roblox_menu_icons);
+            for (int i = 0; i < items.length; i++) {
+                String[] item = items[i];
                 LinearLayout tile = new LinearLayout(this);
                 tile.setOrientation(LinearLayout.VERTICAL);
                 tile.setGravity(Gravity.CENTER);
                 tile.setPadding(dp(8), dp(8), dp(8), dp(8));
                 tile.setBackground(shape(TILE, 5));
-                TextView icon = text(item[1], 35, true);
-                icon.setGravity(Gravity.CENTER);
+                ImageView icon = new ImageView(this);
+                Bitmap originalIcon = Bitmap.createBitmap(
+                        originalMenuIcons, (i % 4) * 120, (i / 4) * 120, 120, 120);
+                icon.setImageBitmap(originalIcon);
+                icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 tile.addView(icon, new LinearLayout.LayoutParams(-1, 0, 1));
                 TextView label = text(item[0], 17, true);
                 label.setGravity(Gravity.CENTER);
