@@ -38,7 +38,6 @@ The Messenger protocol and service callbacks are implemented partly in those mis
 
 Upload these decompiled files as text from the original APK:
 
-- `com/roblox/client/RobloxServiceActivity$1.smali`
 - `com/roblox/client/ActivityNativeMain.smali`
 - `com/roblox/client/ActivityGlView.smali`
 
@@ -86,3 +85,16 @@ Source inspected: `RobloxServiceActivityIncomingHandler.txt` (temporary upload; 
 - All other message codes are passed to Android's base `Handler.handleMessage()`.
 
 This completes the activity-side Messenger callback path: the service broadcasts message code 3, and the activity handler forwards its two integer arguments to the activity's notification callback.
+
+## Confirmed RobloxServiceActivity$1 ServiceConnection behavior
+
+Source inspected: `RobloxServiceActivity1.txt`.
+
+- `onServiceConnected()` wraps the received `IBinder` in a `Messenger` and stores it on the enclosing activity.
+- It sends message code 1 to the service to register the activity's Messenger as `replyTo`.
+- It then calls `doNotifyService(1, 0)`, which sends notification type 1 (connected) with payload 0.
+- It invokes the activity's `onServiceConnected()` callback so the subclass can continue startup and flush any queued messages.
+- A `RemoteException` is logged as a connection failure; the bind counter is incremented after the connection attempt.
+- `onServiceDisconnected()` only logs the disconnection; it does not explicitly clear the stored Messenger in this callback.
+
+This confirms the service handshake order: create service Messenger, register the activity client (message 1), announce connected (notification 1), then invoke the subclass callback.
