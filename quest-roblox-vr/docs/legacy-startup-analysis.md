@@ -45,3 +45,21 @@ Upload these decompiled files as text from the original APK:
 - `com/roblox/client/ActivityGlView.smali`
 
 Then inspect the StoreManager and Utils method signatures before implementing compatibility classes. Avoid inventing message codes, extras, or native startup arguments.
+
+
+## Confirmed RobloxService behavior
+
+Source inspected: `RobloxService.smali` (temporary upload; deleted after inspection).
+
+- `RobloxService` extends Android `Service` and exposes a `Messenger` binder from `onBind()`.
+- Its constructor creates `RobloxService$IncomingHandler`, an empty list of client Messengers, and initializes the current place ID to `-1` (`INVALID_PLACE_ID`).
+- The activity's bind intent extra `roblox_launcher_debugger_attached` enables the service's wait-for-debugger flag.
+- `onCreate()` calls `XAPKManager.unpackAssetsAsync(context)`; asset unpacking is therefore part of service startup.
+- Message constants: register client = 1, unregister client = 2, notification = 3.
+- Notification constants: connected = 1, GL shutdown = 2, set place ID = 3, get place ID = 4.
+- The service keeps registered client Messengers and broadcasts notification messages (message code 3, with notification and extra integers). Dead clients are removed after a `RemoteException`.
+- GL shutdown resets the current place ID to `-1`.
+- `onStartCommand()` returns `2` (`START_NOT_STICKY`).
+- The exact register/unregister and notification handling logic lives in `RobloxService$IncomingHandler.smali`, which is still needed before recreating the protocol.
+
+This confirms that the service is responsible for asset unpacking and coordinating activity clients/place-ID state; it is not the native rendering engine itself.
