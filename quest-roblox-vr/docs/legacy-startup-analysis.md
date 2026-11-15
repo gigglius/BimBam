@@ -38,7 +38,6 @@ The Messenger protocol and service callbacks are implemented partly in those mis
 
 Upload these decompiled files as text from the original APK:
 
-- `com/roblox/client/RobloxServiceActivity$IncomingHandler.smali`
 - `com/roblox/client/RobloxServiceActivity$1.smali`
 - `com/roblox/client/ActivityNativeMain.smali`
 - `com/roblox/client/ActivityGlView.smali`
@@ -76,3 +75,14 @@ Source inspected: `RobloxService$IncomingHandler.smali` (temporary upload; delet
 - Unknown message codes are passed to Android's base `Handler.handleMessage()`.
 
 The service protocol is now clearer: activities register/unregister through Messenger, and notifications carry a type plus an integer payload. The place-ID query response is broadcast using notification type 3 with the service's stored current place ID.
+
+## Confirmed RobloxServiceActivity$IncomingHandler behavior
+
+Source inspected: `RobloxServiceActivityIncomingHandler.txt` (temporary upload; deleted after inspection).
+
+- The handler switches on the incoming message's `what` field.
+- Message code 3 reads `arg1` as the notification type and `arg2` as the integer payload.
+- It calls the enclosing activity's `onServiceNotification(arg1, arg2)` method, then logs both integer values.
+- All other message codes are passed to Android's base `Handler.handleMessage()`.
+
+This completes the activity-side Messenger callback path: the service broadcasts message code 3, and the activity handler forwards its two integer arguments to the activity's notification callback.
