@@ -38,14 +38,12 @@ The Messenger protocol and service callbacks are implemented partly in those mis
 
 Upload these decompiled files as text from the original APK:
 
-- `com/roblox/client/RobloxService.smali`
 - `com/roblox/client/RobloxServiceActivity$IncomingHandler.smali`
 - `com/roblox/client/RobloxServiceActivity$1.smali`
 - `com/roblox/client/ActivityNativeMain.smali`
 - `com/roblox/client/ActivityGlView.smali`
 
 Then inspect the StoreManager and Utils method signatures before implementing compatibility classes. Avoid inventing message codes, extras, or native startup arguments.
-
 
 ## Confirmed RobloxService behavior
 
@@ -60,6 +58,21 @@ Source inspected: `RobloxService.smali` (temporary upload; deleted after inspect
 - The service keeps registered client Messengers and broadcasts notification messages (message code 3, with notification and extra integers). Dead clients are removed after a `RemoteException`.
 - GL shutdown resets the current place ID to `-1`.
 - `onStartCommand()` returns `2` (`START_NOT_STICKY`).
-- The exact register/unregister and notification handling logic lives in `RobloxService$IncomingHandler.smali`, which is still needed before recreating the protocol.
 
 This confirms that the service is responsible for asset unpacking and coordinating activity clients/place-ID state; it is not the native rendering engine itself.
+
+## Confirmed RobloxService$IncomingHandler behavior
+
+Source inspected: `RobloxService$IncomingHandler.smali` (temporary upload; deleted after inspection).
+
+- The handler first checks whether debugger waiting was requested and, if it has not already waited, logs a warning and calls `Debug.waitForDebugger()`. It then marks the wait as completed so it does not repeat.
+- Incoming message code 1 registers `msg.replyTo` in the service's client-Messenger list.
+- Incoming message code 2 unregisters `msg.replyTo`.
+- Incoming message code 3 treats `arg1` as the notification type and `arg2` as its integer payload.
+- Notification type 2 delegates to the service's GL-shutdown handler.
+- Notification type 3 sets the current place ID from `arg2`, broadcasts notification type 3 with that place ID to clients, and logs the new ID.
+- Notification type 4 logs the requested place ID value and broadcasts notification type 3 with the service's current place ID. The incoming `arg2` is logged but is not used as the returned place ID.
+- Other notification types are delegated to the service's general notification handler.
+- Unknown message codes are passed to Android's base `Handler.handleMessage()`.
+
+The service protocol is now clearer: activities register/unregister through Messenger, and notifications carry a type plus an integer payload. The place-ID query response is broadcast using notification type 3 with the service's stored current place ID.
