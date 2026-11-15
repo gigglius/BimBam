@@ -29,3 +29,14 @@ These are evidence that the APK has its own native in-game GUI/menu system. The 
 The uploaded APK contains a stripped native binary, not the original C++ source. The strings above identify the native menu components and settings, but they do not reveal a callable public C++ API for opening the menu or injecting controller pointer events. Those call paths must be traced in the binary before implementing the Quest input adapter.
 
 No replacement menu implementation belongs in this folder.
+
+
+## Dashboard shown in the supplied screen recording
+
+The recording shows the classic blue Roblox account dashboard, which is distinct from the in-game pause/menu bar. A first-pass Android recreation now lives in `quest-roblox-vr/app/src/main/java/com/gigglius/robloxvr/MainActivity.java`:
+
+- Blue dashboard with a left profile/search/navigation rail.
+- Tile launcher for Games, Catalog, Inventory, Builders Club, Profile, Messages, Groups, and Leaderboards.
+- Selecting a tile opens a matching section shell; Android Back returns Home.
+
+This is a visual/navigation prototype only. Account data, catalog contents, game launching, messages, and sign-in are not connected yet. The original native in-game `RBX::TopMenuBar` remains a separate preservation/integration task.
