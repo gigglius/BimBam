@@ -110,16 +110,18 @@ public class MainActivity extends Activity {
 
         LinearLayout right = new LinearLayout(this);
         right.setOrientation(LinearLayout.VERTICAL);
-        right.setBackgroundColor(Color.rgb(235, 239, 244));
+        right.setBackground(image(R.drawable.home_bkg));
         shell.addView(right, new LinearLayout.LayoutParams(0, -1, 4.1f));
         buildTopNavigation(right);
 
         ScrollView scroll = new ScrollView(this);
         scroll.setFillViewport(true);
+        scroll.setBackgroundColor(Color.TRANSPARENT);
         right.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
         LinearLayout body = new LinearLayout(this);
         body.setOrientation(LinearLayout.VERTICAL);
         body.setPadding(dp(16), dp(10), dp(16), dp(16));
+        body.setBackgroundColor(Color.argb(238, 247, 249, 252));
         scroll.addView(body);
 
         if ("Home".equals(page)) buildHome(body);
@@ -132,7 +134,7 @@ public class MainActivity extends Activity {
         LinearLayout side = new LinearLayout(this);
         side.setOrientation(LinearLayout.VERTICAL);
         side.setPadding(dp(10), dp(12), dp(10), dp(10));
-        side.setBackgroundColor(Color.WHITE);
+        side.setBackground(image(R.drawable.lefthand_navigation_background2x));
         LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(0, -1, 1.05f);
         sp.rightMargin = dp(1);
         parent.addView(side, sp);
@@ -155,11 +157,20 @@ public class MainActivity extends Activity {
 
         LinearLayout balances = new LinearLayout(this);
         balances.setGravity(Gravity.CENTER);
-        TextView robux = text("R$ 0", 13, true);
-        TextView tix = text("TIX 100", 13, true);
-        robux.setGravity(Gravity.CENTER);
-        tix.setGravity(Gravity.CENTER);
+        balances.setPadding(dp(4), 0, dp(4), 0);
+        ImageView robuxIcon = new ImageView(this);
+        robuxIcon.setImageResource(R.drawable.robux_symbol2x);
+        robuxIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        balances.addView(robuxIcon, new LinearLayout.LayoutParams(dp(18), dp(18)));
+        TextView robux = text("0", 13, true);
+        robux.setGravity(Gravity.CENTER_VERTICAL);
         balances.addView(robux, new LinearLayout.LayoutParams(0, dp(34), 1));
+        ImageView tixIcon = new ImageView(this);
+        tixIcon.setImageResource(R.drawable.tix_symbol2x);
+        tixIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        balances.addView(tixIcon, new LinearLayout.LayoutParams(dp(18), dp(18)));
+        TextView tix = text("100", 13, true);
+        tix.setGravity(Gravity.CENTER_VERTICAL);
         balances.addView(tix, new LinearLayout.LayoutParams(0, dp(34), 1));
         side.addView(balances);
 
@@ -193,7 +204,7 @@ public class MainActivity extends Activity {
         bar.setOrientation(LinearLayout.HORIZONTAL);
         bar.setGravity(Gravity.CENTER_VERTICAL);
         bar.setPadding(dp(12), dp(4), dp(12), dp(4));
-        bar.setBackgroundColor(Color.WHITE);
+        bar.setBackgroundColor(Color.rgb(250, 251, 253));
         parent.addView(bar, new LinearLayout.LayoutParams(-1, dp(54)));
         String[] links = {"Home", "Games", "Catalog", "Develop", "Groups"};
         for (String link : links) {
@@ -207,6 +218,7 @@ public class MainActivity extends Activity {
 
     private void heading(LinearLayout parent, String value) {
         TextView h = text(value, 21, true);
+        h.setTextColor(NAVY);
         h.setPadding(dp(2), dp(4), 0, dp(6));
         parent.addView(h, new LinearLayout.LayoutParams(-1, dp(42)));
     }
@@ -216,26 +228,29 @@ public class MainActivity extends Activity {
         tile.setOrientation(LinearLayout.VERTICAL);
         tile.setGravity(Gravity.CENTER);
         tile.setBackgroundColor(Color.WHITE);
+        tile.setElevation(dp(2));
 
         FrameLayout artFrame = new FrameLayout(this);
         ImageView art = new ImageView(this);
         art.setImageResource(imageId);
-        art.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        art.setScaleType(ImageView.ScaleType.FIT_XY);
         artFrame.addView(art, new FrameLayout.LayoutParams(-1, -1));
-        tile.addView(artFrame, new LinearLayout.LayoutParams(-1, 0, 1));
 
-        TextView caption = text(name, large ? 16 : 12, true);
-        caption.setGravity(Gravity.CENTER);
+        TextView caption = text(name, large ? 15 : 11, true);
         caption.setTextColor(Color.WHITE);
-        caption.setBackgroundColor(BLUE);
-        tile.addView(caption, new LinearLayout.LayoutParams(-1, dp(32)));
+        caption.setGravity(Gravity.CENTER);
+        caption.setShadowLayer(2f, 1f, 1f, Color.BLACK);
+        FrameLayout.LayoutParams captionParams = new FrameLayout.LayoutParams(
+            -1, dp(large ? 30 : 24), Gravity.BOTTOM);
+        artFrame.addView(caption, captionParams);
+        tile.addView(artFrame, new LinearLayout.LayoutParams(-1, dp(large ? 174 : 132)));
+
         if (subtitle != null) {
-            TextView sub = text(subtitle, 11, false);
+            TextView sub = text(subtitle, 10, false);
             sub.setGravity(Gravity.CENTER);
             sub.setTextColor(MUTED);
-            tile.addView(sub, new LinearLayout.LayoutParams(-1, dp(24)));
+            tile.addView(sub, new LinearLayout.LayoutParams(-1, dp(22)));
         }
-        tile.setElevation(dp(2));
         return tile;
     }
 
