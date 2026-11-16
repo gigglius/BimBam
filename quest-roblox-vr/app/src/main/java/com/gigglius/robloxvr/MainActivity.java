@@ -15,8 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * Layout-first recreation of the classic 2014 Roblox mobile home menu.
- * Artwork is intentionally omitted so original assets can be added later.
+ * Layout-first recreation of the classic 2014 Roblox account dashboard.
+ * The dashboard opens directly; there is no login, signup, or logout screen.
+ * Original APK artwork can be installed in the reserved image areas later.
  */
 public class MainActivity extends Activity {
     private static final int NAVY = Color.rgb(10, 54, 111);
@@ -61,13 +62,13 @@ public class MainActivity extends Activity {
         getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        // Start directly on Home. No authentication screen is shown.
+        page = "Home";
         render();
     }
 
     private void render() {
         FrameLayout root = new FrameLayout(this);
-        // Temporary blue field. The city background and menu artwork are deliberately
-        // left out and can be installed later without changing this layout.
         root.setBackground(new GradientDrawable(
             GradientDrawable.Orientation.TOP_BOTTOM,
             new int[]{Color.rgb(38, 112, 190), Color.rgb(12, 65, 130)}));
@@ -84,7 +85,6 @@ public class MainActivity extends Activity {
             buildSubpage(content);
         }
 
-        // Small info control retained at the lower-right, as in the old shell.
         TextView info = text("ⓘ", 19, true);
         info.setGravity(Gravity.CENTER);
         FrameLayout.LayoutParams ip = new FrameLayout.LayoutParams(dp(38), dp(32),
@@ -103,7 +103,7 @@ public class MainActivity extends Activity {
         params.rightMargin = dp(10);
         parent.addView(profile, params);
 
-        // Reserved avatar area: original avatar artwork will be inserted here later.
+        // Reserved avatar area for the original account/avatar artwork.
         FrameLayout avatarSlot = new FrameLayout(this);
         avatarSlot.setBackground(panel(Color.rgb(24, 91, 158), Color.rgb(73, 143, 205)));
         profile.addView(avatarSlot, new LinearLayout.LayoutParams(-1, 0, 1.0f));
@@ -135,24 +135,22 @@ public class MainActivity extends Activity {
         searchParams.topMargin = dp(10);
         profile.addView(search, searchParams);
 
-        View spacer = new View(this);
-        profile.addView(spacer, new LinearLayout.LayoutParams(1, 0, .12f));
-
-        Button logout = button("Log Out");
-        profile.addView(logout, new LinearLayout.LayoutParams(-1, dp(42)));
-        logout.setOnClickListener(v -> new android.app.AlertDialog.Builder(this)
-            .setTitle("Log Out")
-            .setMessage("Account sign-out requires the original Roblox service.")
-            .setPositiveButton("OK", null).show());
+        // No Log In or Log Out control: the replica opens directly to the dashboard.
     }
 
     private void buildHomeTiles(LinearLayout parent) {
         GridLayout tiles = new GridLayout(this);
         tiles.setColumnCount(2);
-        tiles.setRowCount(2);
+        tiles.setRowCount(4);
         parent.addView(tiles, new LinearLayout.LayoutParams(0, -1, 1.72f));
 
-        String[] names = {"Games", "Catalog", "Inventory", "Builders Club"};
+        String[] names = {
+            "Games", "Catalog",
+            "Inventory", "Builders Club",
+            "Profile", "Messages",
+            "Groups", "Leaderboards"
+        };
+
         for (String name : names) {
             LinearLayout tile = new LinearLayout(this);
             tile.setOrientation(LinearLayout.VERTICAL);
@@ -160,7 +158,7 @@ public class MainActivity extends Activity {
             tile.setBackground(panel(Color.rgb(24, 91, 158), Color.rgb(99, 165, 220)));
             tile.setPadding(dp(5), dp(5), dp(5), dp(5));
 
-            // Empty image well reserved for the original tile artwork.
+            // Reserved image well for the matching original 2014 tile artwork.
             FrameLayout artworkSlot = new FrameLayout(this);
             artworkSlot.setBackgroundColor(Color.TRANSPARENT);
             tile.addView(artworkSlot, new LinearLayout.LayoutParams(-1, 0, 1));
@@ -181,21 +179,30 @@ public class MainActivity extends Activity {
     }
 
     private void buildSubpage(LinearLayout parent) {
-        LinearLayout panel = new LinearLayout(this);
-        panel.setOrientation(LinearLayout.VERTICAL);
-        panel.setPadding(dp(18), dp(16), dp(18), dp(16));
-        panel.setBackground(panel(Color.rgb(15, 70, 137), EDGE));
-        parent.addView(panel, new LinearLayout.LayoutParams(-1, -1));
+        LinearLayout pagePanel = new LinearLayout(this);
+        pagePanel.setOrientation(LinearLayout.VERTICAL);
+        pagePanel.setPadding(dp(18), dp(16), dp(18), dp(16));
+        pagePanel.setBackground(panel(Color.rgb(15, 70, 137), EDGE));
+        parent.addView(pagePanel, new LinearLayout.LayoutParams(-1, -1));
 
         TextView heading = text(page, 24, true);
-        panel.addView(heading, new LinearLayout.LayoutParams(-1, dp(48)));
+        pagePanel.addView(heading, new LinearLayout.LayoutParams(-1, dp(48)));
+
+        TextView description = text(
+            page + " content will be connected in the next menu pass.", 16, false);
+        pagePanel.addView(description, new LinearLayout.LayoutParams(-1, dp(54)));
+
         Button back = button("‹  Back");
-        panel.addView(back, new LinearLayout.LayoutParams(dp(150), dp(44)));
+        pagePanel.addView(back, new LinearLayout.LayoutParams(dp(150), dp(44)));
         back.setOnClickListener(v -> { page = "Home"; render(); });
     }
 
     @Override public void onBackPressed() {
-        if (!"Home".equals(page)) { page = "Home"; render(); }
-        else super.onBackPressed();
+        if (!"Home".equals(page)) {
+            page = "Home";
+            render();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
