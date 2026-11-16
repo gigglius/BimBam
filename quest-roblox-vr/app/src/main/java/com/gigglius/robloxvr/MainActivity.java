@@ -139,43 +139,71 @@ public class MainActivity extends Activity {
     }
 
     private void buildHomeTiles(LinearLayout parent) {
-        GridLayout tiles = new GridLayout(this);
-        tiles.setColumnCount(2);
-        tiles.setRowCount(4);
-        parent.addView(tiles, new LinearLayout.LayoutParams(0, -1, 1.72f));
+        LinearLayout dashboard = new LinearLayout(this);
+        dashboard.setOrientation(LinearLayout.VERTICAL);
+        dashboard.setPadding(dp(3), 0, 0, 0);
+        parent.addView(dashboard, new LinearLayout.LayoutParams(0, -1, 2.35f));
 
-        String[] names = {
-            "Games", "Catalog",
-            "Inventory", "Builders Club",
-            "Profile", "Messages",
-            "Groups", "Leaderboards"
-        };
+        TextView title = text("GAMES", 20, true);
+        title.setPadding(dp(8), 0, 0, 0);
+        dashboard.addView(title, new LinearLayout.LayoutParams(-1, dp(34)));
 
-        for (String name : names) {
-            LinearLayout tile = new LinearLayout(this);
-            tile.setOrientation(LinearLayout.VERTICAL);
-            tile.setGravity(Gravity.CENTER);
-            tile.setBackground(panel(Color.rgb(24, 91, 158), Color.rgb(99, 165, 220)));
-            tile.setPadding(dp(5), dp(5), dp(5), dp(5));
+        // The four primary 2014 dashboard destinations are larger than the
+        // secondary account/community destinations.
+        GridLayout primary = new GridLayout(this);
+        primary.setColumnCount(2);
+        primary.setRowCount(2);
+        dashboard.addView(primary, new LinearLayout.LayoutParams(-1, 0, 1.0f));
 
-            // Reserved image well for the matching original 2014 tile artwork.
-            FrameLayout artworkSlot = new FrameLayout(this);
-            artworkSlot.setBackgroundColor(Color.TRANSPARENT);
-            tile.addView(artworkSlot, new LinearLayout.LayoutParams(-1, 0, 1));
-
-            TextView caption = text(name, 18, true);
-            caption.setGravity(Gravity.CENTER);
-            tile.addView(caption, new LinearLayout.LayoutParams(-1, dp(42)));
-
+        String[] mainNames = {"Games", "Catalog", "Inventory", "Builders Club"};
+        for (String name : mainNames) {
+            LinearLayout tile = createTile(name, true);
             GridLayout.LayoutParams lp = new GridLayout.LayoutParams();
             lp.width = 0;
             lp.height = 0;
             lp.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
             lp.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
             lp.setMargins(dp(5), dp(5), dp(5), dp(5));
-            tiles.addView(tile, lp);
+            primary.addView(tile, lp);
             tile.setOnClickListener(v -> { page = name; render(); });
         }
+
+        TextView more = text("COMMUNITY", 15, true);
+        more.setPadding(dp(8), 0, 0, 0);
+        dashboard.addView(more, new LinearLayout.LayoutParams(-1, dp(30)));
+
+        LinearLayout secondary = new LinearLayout(this);
+        secondary.setOrientation(LinearLayout.HORIZONTAL);
+        dashboard.addView(secondary, new LinearLayout.LayoutParams(-1, dp(76)));
+
+        String[] secondaryNames = {"Profile", "Messages", "Groups", "Leaderboards"};
+        for (String name : secondaryNames) {
+            LinearLayout tile = createTile(name, false);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, -1, 1f);
+            lp.setMargins(dp(4), dp(3), dp(4), dp(5));
+            secondary.addView(tile, lp);
+            tile.setOnClickListener(v -> { page = name; render(); });
+        }
+    }
+
+    private LinearLayout createTile(String name, boolean large) {
+        LinearLayout tile = new LinearLayout(this);
+        tile.setOrientation(LinearLayout.VERTICAL);
+        tile.setGravity(Gravity.CENTER);
+        tile.setBackground(panel(
+            large ? Color.rgb(24, 91, 158) : Color.rgb(18, 77, 143),
+            Color.rgb(99, 165, 220)));
+        tile.setPadding(dp(5), dp(5), dp(5), dp(5));
+
+        // Keep a dedicated artwork area for the original APK images.
+        FrameLayout artworkSlot = new FrameLayout(this);
+        artworkSlot.setBackgroundColor(Color.TRANSPARENT);
+        tile.addView(artworkSlot, new LinearLayout.LayoutParams(-1, 0, 1));
+
+        TextView caption = text(name, large ? 18 : 13, true);
+        caption.setGravity(Gravity.CENTER);
+        tile.addView(caption, new LinearLayout.LayoutParams(-1, large ? dp(38) : dp(28)));
+        return tile;
     }
 
     private void buildSubpage(LinearLayout parent) {
