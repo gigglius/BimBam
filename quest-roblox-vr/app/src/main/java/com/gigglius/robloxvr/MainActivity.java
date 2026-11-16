@@ -23,8 +23,6 @@ import android.widget.TextView;
  */
 public class MainActivity extends Activity {
     private static final int NAVY = Color.rgb(20, 64, 112);
-    private static final int BLUE = Color.rgb(0, 103, 180);
-    private static final int PANEL = Color.rgb(245, 247, 250);
     private static final int TEXT = Color.rgb(45, 55, 65);
     private static final int MUTED = Color.rgb(105, 116, 128);
     private String page = "Home";
@@ -169,7 +167,7 @@ public class MainActivity extends Activity {
         tixIcon.setImageResource(R.drawable.tix_symbol2x);
         tixIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
         balances.addView(tixIcon, new LinearLayout.LayoutParams(dp(18), dp(18)));
-        TextView tix = text("100", 13, true);
+        TextView tix = text("0", 13, true);
         tix.setGravity(Gravity.CENTER_VERTICAL);
         balances.addView(tix, new LinearLayout.LayoutParams(0, dp(34), 1));
         side.addView(balances);
