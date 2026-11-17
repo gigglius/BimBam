@@ -29,7 +29,7 @@ button,input,select{font:inherit}button{cursor:pointer}
 #page{flex:1;min-height:0;overflow:auto;padding:18px 20px 24px;background:#f3f5f8}
 h1{font-size:22px;color:#294c70;margin:0 0 14px}h2{font-size:18px;color:#294c70;margin:0 0 10px}h3{font-size:15px;margin:0 0 8px}
 .section{font-size:20px;color:#294c70;font-weight:bold;margin:2px 0 12px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}\n/* Home dashboard proportions follow the wide Quest reference: two broad cards per row. */\n#page.homePage{padding:16px 18px 24px;background:#f3f5f8}\n.homePage .grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;row-gap:12px}\n.homePage .tile{padding:4px;border:1px solid #d1d8e0}\n.homePage .tileArt{height:clamp(118px,16vh,168px);width:100%;background:#171717}\n.homePage .tileArt img{display:block;width:100%;height:100%;object-fit:cover;object-position:center center}\n.homePage .tileName{height:34px;font-size:14px}\n.homePage .tileDesc{height:24px;font-size:11px}\n.homePage .subsection{margin-top:18px}
 .tile{background:white;border:1px solid #d2d8e0;padding:4px;box-shadow:0 2px 4px #0002;cursor:pointer;min-width:0}
 .tileArt{height:150px;background:#171717;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .tileArt img{height:100%;width:100%;object-fit:contain}
@@ -139,7 +139,7 @@ function toast(s){let t=document.getElementById('toast');t.textContent=s;t.style
 function tile(t){return '<div class="tile" onclick="show(\''+t[3]+'\')"><div class="tileArt"><img src="'+R+t[1]+'.png" alt=""></div><div class="tileName">'+t[0]+'</div><div class="tileDesc">'+t[2]+'</div></div>'}
 function card(name,desc,action,art){return '<article class="card"><div class="thumb">'+(art?'<img src="'+R+art+'.png">':'')+'</div><h3>'+name+'</h3><p>'+desc+'</p><button class="blueBtn" onclick="'+action+'">View</button></article>'}
 function setActive(p){document.querySelectorAll('.side').forEach(e=>e.classList.toggle('active',e.dataset.page===p));document.querySelectorAll('#top button[data-top]').forEach(e=>e.classList.toggle('active',e.dataset.top===p))}
-function show(p){currentPage=p;setActive(p);let c=document.getElementById('page'),h='';
+function show(p){currentPage=p;setActive(p);let c=document.getElementById('page'),h='';c.className=p==='Home'?'homePage':'';
 if(p==='Home'){
  h='<div class="section">Games</div><div class="grid">'+tileData.slice(0,4).map(tile).join('')+'</div><div class="section subsection">Community</div><div class="grid">'+tileData.slice(4).map(tile).join('')+'</div>';
 }
