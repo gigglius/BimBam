@@ -103,10 +103,8 @@ h1{font-size:22px;color:#294c70;margin:0 0 14px}h2{font-size:18px;color:#294c70;
 <div id="frame">
 <aside id="account">
 <img id="brand" src="https://bimbam.local/res/roblox_logo.png" alt="ROBLOX">
-<div id="userline">1234</div>
-<div id="currency"><span><img src="https://bimbam.local/res/robux_symbol2x.png"> 0</span><span><img src="https://bimbam.local/res/tix_symbol2x.png"> 0</span></div>
 <input id="accountSearch" placeholder="Search" onkeydown="if(event.key==='Enter')runSearch(this.value)">
-<nav id="sideNav">
+<nav id="sideNav" style="display:none">
 <div class="side active" data-page="Home" onclick="show('Home')"><img src="https://bimbam.local/res/sb_account.png">Home</div>
 <div class="side" data-page="Profile" onclick="show('Profile')"><img src="https://bimbam.local/res/sb_my_roblox.png">My Roblox</div>
 <div class="side" data-page="Games" onclick="show('Games')"><img src="https://bimbam.local/res/sb_games.png">Games</div>
@@ -118,7 +116,7 @@ h1{font-size:22px;color:#294c70;margin:0 0 14px}h2{font-size:18px;color:#294c70;
 <div class="side" data-page="Inventory" onclick="show('Inventory')"><img src="https://bimbam.local/res/inventory2x.png">Inventory</div>
 <div class="side" data-page="Friends" onclick="show('Friends')"><img src="https://bimbam.local/res/profile2x.png">Friends</div>
 <div class="side" data-page="Leaderboards" onclick="show('Leaderboards')"><img src="https://bimbam.local/res/leaderboards2x.png">Leaderboards</div>
-</nav><div id="year">2014</div>
+</nav><div id="year" style="display:none">2014</div>
 </aside>
 <main id="main">
 <header id="top">
@@ -196,9 +194,9 @@ c.innerHTML=h;if(p==='Catalog')renderCatalog();
 }
 function renderCatalog(){let host=document.getElementById('catalogRows');if(!host)return;let q=(catalogSearch||'').toLowerCase();let rows=catalogItems.filter(x=>(!q||x.join(' ').toLowerCase().includes(q)));host.innerHTML=rows.map((x,i)=>'<div class="itemrow"><img class="itemthumb" src="'+R+(i===2?'default_thumbnail.png':'crate.png')+'" onerror="this.src=\''+R+'default_thumbnail.png\'"><div class="iteminfo"><div class="itemname">'+x[0]+'</div><div style="font-weight:bold;color:#888">iOS</div><div class="itemdesc">'+x[1]+'</div><div class="price">R$ '+x[2]+'</div></div></div>').join('')||'<div class="empty">No items found.</div>'}
 function runSearch(q){catalogSearch=q;show('Games');toast('Search is ready; live search needs the game catalog service')}
-function openGameMenu(){let m=document.getElementById('gameMenu'),b=document.getElementById('menuBox');m.style.display='flex';b.innerHTML='<h2>Game Menu</h2>'+['Resume Game','Settings','Reset Character','Report Abuse','Leave Game'].map(x=>'<button class="menuAction" onclick="menuAction(\''+x+'\')">'+x+'</button>').join('')+'<button class="menuAction" onclick="closeGameMenu()">Close</button>'}
+function openGameMenu(){let m=document.getElementById('gameMenu'),b=document.getElementById('menuBox');m.style.display='flex';b.innerHTML='<h2>Game Menu</h2>'+['Resume Game','Settings','Report Abuse'].map(x=>'<button class="menuAction" onclick="menuAction(\''+x+'\')">'+x+'</button>').join('')+'<button class="menuAction" onclick="closeGameMenu()">Close</button>'}
 function closeGameMenu(){document.getElementById('gameMenu').style.display='none'}
-function menuAction(x){let b=document.getElementById('menuBox');if(x==='Resume Game'){closeGameMenu();return}if(x==='Settings'){b.innerHTML='<h2>Settings</h2><p>Camera Mode　<select><option>Classic</option><option>Follow</option></select></p><p>Movement Mode　<select><option>Default</option><option>Classic</option></select></p><p>Graphics Quality　<input type="range" min="1" max="10" value="5"></p><p>Volume　<input type="range" min="0" max="100" value="80"></p><button class="menuAction" onclick="openGameMenu()">Back</button>';return}if(x==='Reset Character'||x==='Leave Game'){b.innerHTML='<h2>Are you sure?</h2><p>'+x+'?</p><button class="menuAction" onclick="toast(\''+x+' is not connected to the original engine yet\');closeGameMenu()">Confirm</button><button class="menuAction" onclick="openGameMenu()">Cancel</button>';return}if(x==='Report Abuse'){b.innerHTML='<h2>Report Abuse</h2><select id="reportReason"><option>Choose One</option><option>Inappropriate language</option><option>Scamming</option><option>Exploiting</option><option>Other</option></select><p><textarea id="reportText" placeholder="Description" style="width:100%;min-height:80px"></textarea></p><button class="menuAction" onclick="toast(\'Report submission needs server integration\');closeGameMenu()">Submit Report</button><button class="menuAction" onclick="openGameMenu()">Cancel</button>'}}
+function menuAction(x){let b=document.getElementById('menuBox');if(x==='Resume Game'){closeGameMenu();return}if(x==='Settings'){b.innerHTML='<h2>Settings</h2><p>Camera Mode　<select><option>Classic</option><option>Follow</option></select></p><p>Movement Mode　<select><option>Default</option><option>Classic</option></select></p><p>Graphics Quality　<input type="range" min="1" max="10" value="5"></p><p>Volume　<input type="range" min="0" max="100" value="80"></p><button class="menuAction" onclick="openGameMenu()">Back</button>';return}if(x==='Report Abuse'){b.innerHTML='<h2>Report Abuse</h2><select id="reportReason"><option>Choose One</option><option>Inappropriate language</option><option>Scamming</option><option>Exploiting</option><option>Other</option></select><p><textarea id="reportText" placeholder="Description" style="width:100%;min-height:80px"></textarea></p><button class="menuAction" onclick="toast(\'Report submission needs server integration\');closeGameMenu()">Submit Report</button><button class="menuAction" onclick="openGameMenu()">Cancel</button>'}}
 document.getElementById('gameMenu').addEventListener('click',e=>{if(e.target.id==='gameMenu')closeGameMenu()});
 show('Home');
 </script>
