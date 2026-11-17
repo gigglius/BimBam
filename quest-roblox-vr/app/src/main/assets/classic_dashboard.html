@@ -1,77 +1,97 @@
 <!doctype html>
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta charset="utf-8"><title>BimBam 2014</title>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>BimBam · Roblox 2014</title>
 <style>
-:root{--blue:#2877bd;--nav:#222;--line:#d5d5d5;--text:#333;--muted:#777}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff;overflow:hidden}
-#app{height:100%;display:flex;flex-direction:column;background:#fff}
-.top{height:54px;flex:none;background:#202020;color:#fff;display:flex;align-items:center;padding:0 18px;gap:18px;border-bottom:3px solid #111}
-.brand{font-weight:bold;font-size:21px;letter-spacing:-1px;color:#fff}.brand em{color:#83c9ff;font-style:normal}
-.topnav{display:flex;gap:22px;align-items:center;flex:1}.topnav button,.top button{background:none;border:0;color:#eee;font-size:15px;padding:10px 8px}
-.account{display:flex;gap:15px;align-items:center;font-size:13px;color:#ddd}.balance{white-space:nowrap}
-.main{min-height:0;flex:1;display:flex;overflow:hidden}
-.rail{width:54px;background:#202020;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:14px;color:#ddd}
-.rail .dot{width:27px;height:27px;border-radius:50%;border:1px solid #777;display:grid;place-items:center;font-size:13px}
-.content{flex:1;min-width:0;overflow:auto;background:#fff;padding:20px 24px}
-.page-title{font-size:23px;font-weight:bold;border-bottom:1px solid #ddd;padding:0 0 12px;margin-bottom:16px}
-.homegrid{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:16px}
-.tile{border:1px solid #d4d4d4;background:#fff;box-shadow:0 1px 2px #bbb;min-height:185px;display:flex;flex-direction:column;cursor:pointer}
-.tile .art{height:132px;background:#f4f4f4 center/contain no-repeat;display:grid;place-items:center}
-.tile .art img{max-width:100%;max-height:100%;object-fit:contain}
-.tile .label{height:43px;background:#2877bd;color:#fff;font-size:16px;font-weight:bold;display:grid;place-items:center}
-.tile .sub{height:28px;text-align:center;color:#777;font-size:12px;padding-top:7px}
-.section-title{font-size:21px;color:#333;margin:20px 0 12px;border-bottom:1px solid #ddd;padding-bottom:8px}
-.sidebar{width:210px;flex:none;background:#f2f2f2;border-right:1px solid #ccc;padding:14px 12px;overflow:auto}
-.sideitem{padding:10px 9px;border-bottom:1px solid #e1e1e1;font-size:14px;cursor:pointer}.sideitem.active{background:#ddd;font-weight:bold}
-.search{width:100%;padding:9px;border:1px solid #bbb;margin:8px 0 12px;font-size:14px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
-.card{border:1px solid #ddd;padding:10px;min-height:120px;background:#fff}
-.card h3{font-size:16px;margin:6px 0}.card p{font-size:13px;color:#666;margin:5px 0}
-.btn{background:#2877bd;color:#fff;border:0;padding:9px 16px;font-weight:bold;cursor:pointer}
-.detail{display:grid;grid-template-columns:minmax(200px,42%) 1fr;gap:20px}.preview{background:#eee;min-height:210px;display:grid;place-items:center;border:1px solid #ddd}
-.preview img{max-width:95%;max-height:210px;object-fit:contain}
-.tabs{display:flex;gap:4px;border-bottom:1px solid #ccc;margin:12px 0}.tabs button{padding:9px 14px;border:1px solid #ccc;background:#eee}
-.game-screen{position:absolute;inset:0;background:#111b;color:#fff;display:none;align-items:center;justify-content:center}
-.menu-panel{width:min(440px,80vw);background:#171717eF;border:1px solid #777;padding:22px;text-align:center}
-.menu-panel h2{font-size:23px;margin:4px 0 18px}.menu-panel button{display:block;width:100%;margin:8px 0;padding:12px;background:#222;color:#fff;border:1px solid #aaa;font-size:16px}
-@media(max-width:800px){.sidebar{width:150px}.homegrid{grid-template-columns:repeat(2,minmax(120px,1fr))}.account{gap:6px}.topnav{gap:4px}.topnav button{font-size:12px}}
-</style></head>
-<body><div id="app">
-<header class="top"><div class="brand">ROBLOX</div><nav class="topnav"><button onclick="show('Home')">Home</button><button onclick="show('Games')">Games</button><button onclick="show('Catalog')">Catalog</button><button onclick="show('Develop')">Develop</button><button onclick="show('Groups')">Groups</button></nav><div class="account"><span>1234</span><span class="balance">R$ 0</span><span class="balance">Tix 0</span></div></header>
-<div class="main"><div class="rail"><div class="dot">R</div><div class="dot">⌂</div><div class="dot">▶</div><div class="dot">▣</div><div class="dot">●</div></div>
-<aside class="sidebar"><img src="file:///android_res/drawable-nodpi/roblox_logo.png" style="width:100%;height:42px;object-fit:contain" onerror="this.style.display='none'"><div style="font-weight:bold;text-align:center;padding:8px">1234</div><div style="display:flex;justify-content:space-around;font-size:12px"><span>R$ 0</span><span>◈ 0</span></div><input class="search" placeholder="Search" onkeydown="if(event.key==='Enter')search(this.value)">
-<div class="sideitem active" onclick="show('Home')">⌂ &nbsp; Home</div><div class="sideitem" onclick="show('Profile')">♟ &nbsp; My Roblox</div><div class="sideitem" onclick="show('Games')">▶ &nbsp; Games</div><div class="sideitem" onclick="show('Catalog')">◆ &nbsp; Catalog</div><div class="sideitem" onclick="show('Community')">● &nbsp; Community</div><div class="sideitem" onclick="show('Develop')">⚒ &nbsp; Develop</div><div class="sideitem" onclick="show('Messages')">✉ &nbsp; Messages</div><div class="sideitem" onclick="show('Groups')">♣ &nbsp; Groups</div><div class="sideitem" onclick="show('Inventory')">▤ &nbsp; Inventory</div><div class="sideitem" onclick="show('Avatar')">♙ &nbsp; Avatar</div></aside>
-<main class="content" id="content"></main></div></div>
+:root{--ink:#34495e;--blue:#2477bd;--side:#7890aa;--line:#cbd3df}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#26384a}
+body{background:#9fc9e4 url('file:///android_res/drawable-nodpi/home_bkg.png') center center/cover no-repeat}
+#app{height:100%;width:100%;display:flex;align-items:stretch;padding:2.2vh 2.5vw 2.2vh 31vw;position:relative}
+#app:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(45,93,132,.12),rgba(255,255,255,.06));pointer-events:none}
+.sidebar{position:absolute;z-index:2;left:31vw;top:2.2vh;bottom:2.2vh;width:10.2vw;min-width:145px;max-width:205px;background:rgba(111,139,168,.93) url('file:///android_res/drawable-nodpi/lefthand_navigation_background2x.png') center/cover no-repeat;border-radius:0 0 14px 14px;padding:2.2vh .55vw;color:#26384a;display:flex;flex-direction:column}
+.logo{width:100%;height:auto;max-height:62px;object-fit:contain;margin:0 auto 1vh}
+.username{text-align:center;font-size:clamp(14px,1.25vw,20px);font-weight:bold;margin:.2vh 0 1vh}
+.balances{display:flex;justify-content:space-around;align-items:center;font-size:clamp(10px,.78vw,13px);margin-bottom:1vh}
+.balances img{width:15px;height:15px;object-fit:contain;vertical-align:middle}
+.search{width:100%;height:34px;border:0;background:#fff;padding:0 9px;font-size:clamp(11px,.8vw,14px);margin:1vh 0}
+.navlist{display:flex;flex-direction:column;gap:.25vh;overflow:auto}
+.sideitem{height:34px;display:flex;align-items:center;gap:10px;padding:0 8px;border-radius:3px;font-size:clamp(10px,.82vw,14px);cursor:pointer;color:#26384a}
+.sideitem img{width:16px;height:16px;object-fit:contain}
+.sideitem.active{background:rgba(255,255,255,.28);font-weight:bold}
+.year{margin-top:auto;text-align:center;border-top:1px solid rgba(40,60,80,.35);padding-top:8px;font-size:9px;color:#526b82}
+.shell{z-index:1;margin-left:10.2vw;width:58vw;height:95.6vh;max-width:1200px;background:rgba(255,255,255,.94);border-radius:0 0 14px 14px;box-shadow:0 4px 18px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden;transform:rotate(-2deg);transform-origin:center}
+.topnav{height:8.5vh;min-height:58px;flex:none;background:rgba(255,255,255,.98);display:flex;align-items:center;justify-content:space-around;padding:0 2vw;border-bottom:1px solid #e2e6ed}
+.topnav button{border:0;background:none;color:#303b47;font-size:clamp(11px,.85vw,15px);padding:12px 10px;cursor:pointer}
+.content{overflow:auto;flex:1;min-height:0;padding:1.8vh 1.3vw 2vh}
+.section-title{font-size:clamp(17px,1.3vw,23px);font-weight:bold;color:#294c70;margin:0 0 1.1vh}
+.homegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2vh .8vw}
+.tile{background:#fff;border:1px solid #d6dce4;box-shadow:0 2px 4px rgba(0,0,0,.12);padding:4px;cursor:pointer;min-width:0}
+.tile .art{height:15vh;min-height:88px;max-height:190px;background:#161616;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tile .art img{width:100%;height:100%;object-fit:contain}
+.tile .label{height:4.1vh;min-height:27px;background:linear-gradient(#247fc5,#07508f);color:#fff;font-weight:bold;font-size:clamp(11px,.85vw,15px);display:grid;place-items:center}
+.tile .sub{height:2.7vh;min-height:20px;color:#777;font-size:clamp(9px,.65vw,12px);display:grid;place-items:center}
+.community{margin-top:1.7vh}
+.page-title{font-size:clamp(18px,1.35vw,24px);font-weight:bold;color:#294c70;margin:0 0 14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.card{background:#fff;border:1px solid #d7dce3;padding:12px;box-shadow:0 1px 3px #0001}
+.card h3{margin:0 0 7px;font-size:16px}.card p{font-size:13px;color:#687888}
+.btn{background:#2477bd;color:white;border:0;padding:8px 14px;font-weight:bold}
+.tabs{display:flex;gap:6px;border-bottom:1px solid #cbd3df;margin:12px 0}
+.tabs button{padding:9px 13px;background:#e9eef5;border:1px solid #cbd3df}
+.detail{display:grid;grid-template-columns:38% 1fr;gap:16px}.preview{min-height:180px;background:#e8edf4;border:1px solid #cbd3df;display:grid;place-items:center}
+.game-screen{position:absolute;z-index:5;inset:0;background:#0009;display:none;align-items:center;justify-content:center}
+.menu-panel{width:min(440px,80vw);background:#171717ef;color:white;border:1px solid #777;padding:22px;text-align:center}
+.menu-panel button{display:block;width:100%;margin:8px 0;padding:12px;background:#222;color:#fff;border:1px solid #aaa}
+@media(max-width:900px){#app{padding-left:25vw}.sidebar{left:25vw;width:22vw;min-width:0}.shell{margin-left:22vw;width:68vw}.tile .art{height:13vh}.sideitem{gap:5px;padding:0 4px}}
+</style>
+</head>
+<body>
+<div id="app">
+<aside class="sidebar">
+<img class="logo" src="file:///android_res/drawable-nodpi/roblox_logo.png" alt="ROBLOX">
+<div class="username">1234</div>
+<div class="balances"><span><img src="file:///android_res/drawable-nodpi/robux_symbol2x.png"> 0</span><span><img src="file:///android_res/drawable-nodpi/tix_symbol2x.png"> 0</span></div>
+<input class="search" placeholder="Search" onkeydown="if(event.key==='Enter')search(this.value)">
+<nav class="navlist">
+<div class="sideitem active" onclick="show('Home')"><img src="file:///android_res/drawable-nodpi/sb_account.png">Home</div>
+<div class="sideitem" onclick="show('Profile')"><img src="file:///android_res/drawable-nodpi/sb_my_roblox.png">My Roblox</div>
+<div class="sideitem" onclick="show('Games')"><img src="file:///android_res/drawable-nodpi/sb_games.png">Games</div>
+<div class="sideitem" onclick="show('Catalog')"><img src="file:///android_res/drawable-nodpi/sb_catalog.png">Catalog</div>
+<div class="sideitem" onclick="show('Community')"><img src="file:///android_res/drawable-nodpi/sb_community.png">Community</div>
+<div class="sideitem" onclick="show('Develop')"><img src="file:///android_res/drawable-nodpi/sb_develop.png">Develop</div>
+<div class="sideitem" onclick="show('Messages')"><img src="file:///android_res/drawable-nodpi/messages2x.png">Messages</div>
+<div class="sideitem" onclick="show('Groups')"><img src="file:///android_res/drawable-nodpi/groups2x.png">Groups</div>
+<div class="sideitem" onclick="show('Inventory')"><img src="file:///android_res/drawable-nodpi/inventory2x.png">Inventory</div>
+</nav><div class="year">2014</div>
+</aside>
+<section class="shell">
+<header class="topnav"><button onclick="show('Home')">Home</button><button onclick="show('Games')">Games</button><button onclick="show('Catalog')">Catalog</button><button onclick="show('Develop')">Develop</button><button onclick="show('Groups')">Groups</button></header>
+<main class="content" id="content"></main>
+</section>
 <div id="gameMenu" class="game-screen"><div class="menu-panel" id="menuPanel"></div></div>
+</div>
 <script>
-const asset=n=>'file:///android_res/drawable-nodpi/'+n+'.png';
+const root='file:///android_res/drawable-nodpi/';
 const tiles=[['Games','games2x','Play games'],['Catalog','catalog2x','Browse avatar items'],['Inventory','inventory2x','Your items'],['Builders Club','builders_club2x','Membership'],['Profile','profile2x','Your profile'],['Messages','messages2x','Inbox'],['Groups','groups2x','Find and join groups'],['Leaderboards','leaderboards2x','Player rankings']];
-const games=[['Murder Mystery 2 Legacy','Classic mystery game','Play'],['Natural Disaster Survival','Survive disasters','Play'],['Work at a Pizza Place','Work with friends','Play'],['Speed Run 4','Run through obstacle courses','Play']];
-let current='Home';
-function card(title,desc,action='Open'){return '<div class="card"><h3>'+title+'</h3><p>'+desc+'</p><button class="btn" onclick="detail(\''+title.replace(/'/g,"\\'")+'\')">'+action+'</button></div>'}
-function tile(t){return '<div class="tile" onclick="show(\''+t[0]+'\')"><div class="art"><img src="'+asset(t[1])+'" onerror="this.style.display=\'none\'"></div><div class="label">'+t[0]+'</div><div class="sub">'+t[2]+'</div></div>'}
-function show(p){current=p;let c=document.getElementById('content');document.querySelectorAll('.sideitem').forEach(x=>x.classList.toggle('active',x.textContent.trim().includes(p)));let html='';
-if(p==='Home'){html='<div class="page-title">Home</div><div class="homegrid">'+tiles.slice(0,4).map(tile).join('')+'</div><div class="section-title">Community</div><div class="homegrid">'+tiles.slice(4).map(tile).join('')+'</div>'}
-else if(p==='Games'){html='<div class="page-title">Games</div><div class="tabs"><button>Featured</button><button>Popular</button><button>Top Earning</button><button>Top Rated</button></div><h3>Top Rated</h3><div class="cards">'+games.map(g=>card(g[0],g[1],'View Details')).join('')+'</div>'}
-else if(p==='Catalog'){html='<div class="page-title">Featured Items on ROBLOX</div><div class="detail"><div><div class="sideitem">Featured Items</div><div class="sideitem">Hats</div><div class="sideitem">Faces</div><div class="sideitem">Gear</div><div class="sideitem">Shirts</div><div class="sideitem">Pants</div><div class="sideitem">T-Shirts</div></div><div class="cards">'+['Classic Fedora','Green Banded Top Hat','Silverthorn Antlers','ROBLOX Visor','Red Baseball Cap','Classic Sword'].map(x=>card(x,'Catalog item · View details','View Item')).join('')+'</div></div>'}
-else if(p==='Avatar'){html='<div class="page-title">Character Customizer</div><div class="tabs"><button>Avatar</button><button>Body</button><button>Clothing</button><button>Costumes</button></div><div class="detail"><div class="preview">Avatar Preview</div><div><h3>Currently Wearing</h3><div class="cards">'+['Hats','Hair','Face','Shirts','Pants','Gear'].map(x=>card(x,'Equipped items')).join('')+'</div></div></div>'}
-else if(p==='Profile'){html='<div class="page-title">Your Profile</div><div class="detail"><div class="preview">1234</div><div><h2>1234</h2><p>Active Places</p><p>My Friends</p><p>Player Badges</p><p>Groups</p></div></div><div class="section-title">Statistics</div><p>Account statistics and player information</p><div class="section-title">Favorites</div>'}
-else if(p==='Groups'){html='<div class="page-title">Groups</div><div class="tabs"><button>My Groups</button><button>Search Groups</button><button>Create Group</button></div><div class="cards">'+card('My Groups','Groups joined by 1234')+card('Find Groups','Browse and search for groups')+'</div>'}
-else if(p==='Inventory'){html='<div class="page-title">Inventory</div><div class="tabs"><button>All</button><button>Hats</button><button>Gear</button><button>Faces</button><button>Shirts</button><button>Pants</button></div><div class="cards">'+['Hats','Gear','Faces','Shirts','Pants','T-Shirts'].map(x=>card(x,'Items owned by 1234')).join('')+'</div>'}
-else if(p==='Messages'){html='<div class="page-title">Messages</div><div class="tabs"><button>Inbox</button><button>Sent</button><button>Archived</button></div><p>No messages to display.</p>'}
-else if(p==='Develop'){html='<div class="page-title">Develop</div><div class="cards">'+card('My Creations','Your places and models')+card('Library','Browse public models and decals')+'</div>'}
-else if(p==='Community'){html='<div class="page-title">Community</div><div class="homegrid">'+tiles.slice(4).map(tile).join('')+'</div>'}
-else if(p==='Game Details'){html='<div class="page-title">Murder Mystery 2 Legacy</div><div class="detail"><div class="preview">Game Thumbnail</div><div><h2>Murder Mystery 2 Legacy</h2><p>Classic Roblox game details</p><p>Created by the original game creator</p><button class="btn" onclick="startGame()">Play</button></div></div><div class="section-title">Description</div><p>Game description and server information.</p>'}
-else{html='<div class="page-title">'+p+'</div><p>Classic 2014 '+p+' page.</p>'}
-c.innerHTML=html}
-function detail(name){if(name==='Murder Mystery 2 Legacy'||name.includes('Natural')||name.includes('Pizza')||name.includes('Speed'))show('Game Details');else show('Catalog')}
+const games=['Games','Popular','Top Earning','Top Rated'];
+function tile(t){return '<div class="tile" onclick="show(\''+t[0]+'\')"><div class="art"><img src="'+root+t[1]+'.png"></div><div class="label">'+t[0]+'</div><div class="sub">'+t[2]+'</div></div>'}
+function card(t,d){return '<div class="card"><h3>'+t+'</h3><p>'+d+'</p><button class="btn" onclick="show(\'Game Details\')">View</button></div>'}
+function show(p){let c=document.getElementById('content');document.querySelectorAll('.sideitem').forEach(x=>x.classList.toggle('active',x.textContent.trim()===p||(p==='Home'&&x.textContent.trim()==='Home')));let h='';
+if(p==='Home'){h='<div class="section-title">Games</div><div class="homegrid">'+tiles.slice(0,4).map(tile).join('')+'</div><div class="section-title community">Community</div><div class="homegrid">'+tiles.slice(4).map(tile).join('')+'</div>'}
+else if(p==='Games'){h='<div class="page-title">Games</div><div class="tabs">'+games.map(x=>'<button>'+x+'</button>').join('')+'</div><div class="cards">'+card('Featured Games','Browse classic Roblox games')+card('Popular Games','Most played games')+card('Top Rated','Highest rated games')+'</div>'}
+else if(p==='Game Details'){h='<div class="page-title">Game Details</div><div class="detail"><div class="preview">Game Thumbnail</div><div><h2>Game title</h2><p>Creator · Genre</p><p>Visits · Favorites · Playing</p><button class="btn">Play</button></div></div><h3>Description</h3>'}
+else if(p==='Catalog'){h='<div class="page-title">Featured Items on ROBLOX</div><div class="tabs"><button>Featured</button><button>Hats</button><button>Faces</button><button>Gear</button><button>Shirts</button><button>Pants</button></div><div class="cards">'+['Featured Items','Hats','Faces','Gear','Shirts','Pants'].map(x=>card(x,'Browse '+x.toLowerCase())).join('')+'</div>'}
+else if(p==='Avatar'){h='<div class="page-title">Character Customizer</div><div class="tabs"><button>Avatar</button><button>Body</button><button>Clothing</button><button>Costumes</button></div><div class="detail"><div class="preview">Avatar Preview</div><div><h3>Currently Wearing</h3><div class="cards">'+['Hats','Hair','Face','Shirts','Pants','Gear'].map(x=>card(x,'Equipped items')).join('')+'</div></div></div>'}
+else if(p==='Profile'){h='<div class="page-title">My Roblox</div><div class="detail"><div class="preview">1234</div><div><h2>1234</h2><p>Active Places · Friends · Player Badges</p><p>Groups and statistics</p></div></div><h3>Favorites</h3>'}
+else if(p==='Groups'){h='<div class="page-title">Groups</div><div class="tabs"><button>My Groups</button><button>Search Groups</button><button>Create Group</button></div><div class="cards">'+card('My Groups','Groups joined by 1234')+card('Find Groups','Browse groups')+'</div>'}
+else if(p==='Inventory'){h='<div class="page-title">Inventory</div><div class="tabs"><button>All</button><button>Hats</button><button>Gear</button><button>Faces</button><button>Shirts</button><button>Pants</button></div><div class="cards">'+['Hats','Gear','Faces','Shirts','Pants'].map(x=>card(x,'Items owned by 1234')).join('')+'</div>'}
+else if(p==='Messages'){h='<div class="page-title">Messages</div><div class="tabs"><button>Inbox</button><button>Sent</button><button>Archived</button></div><p>No messages to display.</p>'}
+else if(p==='Develop'){h='<div class="page-title">Develop</div><div class="cards">'+card('My Creations','Your places and models')+card('Library','Browse public models and decals')+'</div>'}
+else{h='<div class="page-title">'+p+'</div>'}c.innerHTML=h}
 function search(q){show('Games')}
-function startGame(){document.getElementById('gameMenu').style.display='flex';pauseMenu()}
-function pauseMenu(){document.getElementById('menuPanel').innerHTML='<h2>Game Menu</h2><button onclick="resumeGame()">Resume Game</button><button onclick="showSettings()">Settings</button><button onclick="confirmReset()">Reset Character</button><button onclick="showReport()">Report Abuse</button><button onclick="leaveGame()">Leave Game</button>'}
-function resumeGame(){document.getElementById('gameMenu').style.display='none'}
-function showSettings(){document.getElementById('menuPanel').innerHTML='<h2>Settings</h2><p>Camera Mode　Default</p><p>Movement Mode　Default</p><p>Volume　━━━━●</p><p>Graphics Mode　Automatic</p><button onclick="pauseMenu()">Back to Menu</button>'}
-function confirmReset(){document.getElementById('menuPanel').innerHTML='<h2>Are you sure you want to reset your character?</h2><button onclick="pauseMenu()">Cancel</button><button onclick="pauseMenu()">Reset</button>'}
-function showReport(){document.getElementById('menuPanel').innerHTML='<h2>Report Abuse</h2><p>Choose a reason</p><select><option>Inappropriate language</option><option>Scamming</option><option>Exploiting</option><option>Other rule violation</option></select><p><textarea placeholder="Description"></textarea></p><button onclick="pauseMenu()">Submit</button><button onclick="pauseMenu()">Cancel</button>'}
-function leaveGame(){document.getElementById('gameMenu').style.display='none';show('Home')}
 show('Home');
-</script></body></html>
+</script>
+</body></html>
