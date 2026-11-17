@@ -150,7 +150,7 @@ function card(name,desc,action,art){return '<article class="card"><div class="th
 function setActive(p){document.querySelectorAll('.side').forEach(e=>e.classList.toggle('active',e.dataset.page===p));document.querySelectorAll('#top button[data-top]').forEach(e=>e.classList.toggle('active',e.dataset.top===p))}
 function show(p){currentPage=p;setActive(p);let c=document.getElementById('page'),h='';c.className=p==='Home'?'homePage':'';
 if(p==='Home'){
- h='<div class="section">Games</div><div class="grid">'+tileData.slice(0,4).map(tile).join('')+'</div><div class="section subsection">Community</div><div class="grid">'+tileData.slice(4).map(tile).join('')+'</div>';
+ h='<div class="section">Games</div><div class="grid">'+tileData.slice(0,4).map(tile).join('')+'</div><div class="grid">'+tileData.slice(4).map(tile).join('')+'</div>';
 }
 else if(p==='Games'){
  h='<h1>Games</h1><div class="tabs">'+['Popular','Top Earning','Top Rated','Recently Updated','Featured'].map(x=>'<button class="'+(gameTab===x?'active':'')+'" onclick="gameTab=\''+x+'\';show(\'Games\')">'+x+'</button>').join('')+'</div><div class="cards">'+card('Classic Games','Browse games from the 2014 catalog','toast(\'Game data requires the BimBam game service\')','games2x')+card('Popular Games','Popular experiences','toast(\'Game data requires the BimBam game service\')','games2x')+card('Featured Games','Featured community creations','toast(\'Game data requires the BimBam game service\')','games2x')+'</div>';
