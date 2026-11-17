@@ -22,7 +22,7 @@ button,input,select{font:inherit}button{cursor:pointer}
 .side img{width:17px;height:17px;object-fit:contain}.side.active,.side:hover{background:#ffffff45}
 #year{margin-top:auto;border-top:1px solid #4f6d8c66;text-align:center;padding-top:8px;font-size:9px;color:#506983}
 #main{min-width:0;flex:1;display:flex;flex-direction:column;background:transparent}
-#top{height:58px;flex:none;background:#fff;border-bottom:1px solid #d5dce5;display:flex;align-items:center;justify-content:space-around;padding:0 12px}
+#top{display:none}
 #top button{background:none;border:0;color:#303d4b;padding:12px 15px;font-size:13px}
 #top button.active{font-weight:bold;color:#174d85;border-bottom:3px solid #2375b7}
 #top .more{margin-left:auto}
@@ -31,13 +31,13 @@ h1{font-size:22px;color:#294c70;margin:0 0 14px}h2{font-size:18px;color:#294c70;
 .section{font-size:20px;color:#294c70;font-weight:bold;margin:2px 0 12px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 /* Home dashboard proportions follow the wide Quest reference: two broad cards per row. */
-#page.homePage{padding:16px 18px 24px;background:transparent}
-.homePage .grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;row-gap:12px}
-.homePage .tile{padding:0;border:0;background:transparent;box-shadow:none;display:flex;flex-direction:column}
-.homePage .tileArt{height:clamp(138px,19vh,190px);width:100%;background:transparent;border:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#page.homePage{padding:18px 18px 58px;background:transparent}
+.homePage .grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px;row-gap:18px}
+.homePage .tile{padding:0;border:0;background:transparent;box-shadow:none;display:flex;flex-direction:column;min-height:0}
+.homePage .tileArt{height:clamp(165px,23vh,225px);width:100%;background:transparent;border:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .homePage .tileArt img{display:block;width:100%;height:100%;object-fit:contain;object-position:center center;background:transparent}
-.homePage .tileName{height:36px;font-size:14px;order:2}
-.homePage .tileDesc{height:24px;font-size:11px;background:transparent;color:#687887;order:3}
+.homePage .tileName{height:42px;min-height:42px;padding:0 14px;display:flex;align-items:center;justify-content:flex-start;font-size:15px;order:2;background:linear-gradient(#267fc2,#07518f);color:#fff;font-weight:bold}
+.homePage .tileDesc{display:none}
 .homePage .subsection{margin-top:18px}
 .tile{background:transparent;border:0;padding:0;box-shadow:none;cursor:pointer;min-width:0}
 .tileArt{height:150px;background:#171717;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -77,7 +77,7 @@ h1{font-size:22px;color:#294c70;margin:0 0 14px}h2{font-size:18px;color:#294c70;
 #menuBox{width:min(430px,90vw);max-height:90%;overflow:auto;background:#1d1d1d;color:#fff;padding:20px;border:1px solid #888;box-shadow:0 5px 20px #0008}
 #menuBox h2{color:white;text-align:center}
 .menuAction{width:100%;padding:12px;margin:5px 0;background:#303030;color:white;border:1px solid #777}
-#toast{position:absolute;z-index:20;bottom:12px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:9px 14px;border-radius:4px;display:none;font-size:12px}
+#homeInfo{display:none;position:absolute;z-index:5;left:18px;bottom:14px;width:36px;height:36px;border:1px solid #06477e;border-radius:50%;background:linear-gradient(#267fc2,#07518f);color:#fff;font:bold 22px Arial;line-height:32px;text-align:center;box-shadow:0 2px 5px #0005}#toast{position:absolute;z-index:20;bottom:12px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:9px 14px;border-radius:4px;display:none;font-size:12px}
 @media(max-width:700px){
  #frame{width:100vw;height:100vh;border:0;border-radius:0;flex-direction:column}
  #account{width:100%;height:auto;flex:none;padding:8px 10px;background:linear-gradient(#174c91,#082d68);color:white;display:grid;grid-template-columns:68px 1fr;grid-template-rows:auto auto;column-gap:10px}
@@ -89,7 +89,7 @@ h1{font-size:22px;color:#294c70;margin:0 0 14px}h2{font-size:18px;color:#294c70;
  #top button{padding:10px 9px;font-size:12px;white-space:nowrap}
  #page{padding:12px 10px 20px}
  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
- .tile{padding:2px}.tileArt{height:82px}.tileName{height:27px;font-size:12px}.tileDesc{display:none}
+ .tile{padding:0}.homePage .tileArt{height:clamp(125px,19vh,175px)}.homePage .tileName{height:36px;min-height:36px;font-size:13px;padding:0 9px}.tileArt{height:82px}.tileName{height:27px;font-size:12px}.tileDesc{display:none}
  .section{font-size:17px;margin:4px 0 8px}
  .toolbar{margin:-12px -10px 10px;height:38px}
  .itemrow{min-height:105px;padding:6px}.itemthumb{width:65px;height:88px}.itemname{font-size:14px}
@@ -123,7 +123,7 @@ h1{font-size:22px;color:#294c70;margin:0 0 14px}h2{font-size:18px;color:#294c70;
 <button data-top="Home" onclick="show('Home')">Home</button><button data-top="Games" onclick="show('Games')">Games</button><button data-top="Catalog" onclick="show('Catalog')">Catalog</button><button data-top="Develop" onclick="show('Develop')">Develop</button><button data-top="Groups" onclick="show('Groups')">Groups</button>
 <button class="more" onclick="openGameMenu()">☰</button>
 </header>
-<section id="page"></section>
+<section id="page"></section><button id="homeInfo" aria-label="Information" onclick="toast('2014 Roblox menu')">i</button>
 </main>
 </div>
 <div id="gameMenu"><div id="menuBox"></div></div><div id="toast"></div>
@@ -146,7 +146,7 @@ function toast(s){let t=document.getElementById('toast');t.textContent=s;t.style
 function tile(t){return '<div class="tile" onclick="show(\''+t[3]+'\')"><div class="tileArt"><img src="'+R+t[1]+'.png" alt=""></div><div class="tileName">'+t[0]+'</div><div class="tileDesc">'+t[2]+'</div></div>'}
 function card(name,desc,action,art){return '<article class="card"><div class="thumb">'+(art?'<img src="'+R+art+'.png">':'')+'</div><h3>'+name+'</h3><p>'+desc+'</p><button class="blueBtn" onclick="'+action+'">View</button></article>'}
 function setActive(p){document.querySelectorAll('.side').forEach(e=>e.classList.toggle('active',e.dataset.page===p));document.querySelectorAll('#top button[data-top]').forEach(e=>e.classList.toggle('active',e.dataset.top===p))}
-function show(p){currentPage=p;setActive(p);let c=document.getElementById('page'),h='';c.className=p==='Home'?'homePage':'';
+function show(p){currentPage=p;setActive(p);document.getElementById('homeInfo').style.display=p==='Home'?'block':'none';let c=document.getElementById('page'),h='';c.className=p==='Home'?'homePage':'';
 if(p==='Home'){
  h='<div class="section">Games</div><div class="grid">'+tileData.slice(0,4).map(tile).join('')+'</div><div class="grid">'+tileData.slice(4).map(tile).join('')+'</div>';
 }
