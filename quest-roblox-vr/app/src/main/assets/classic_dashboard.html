@@ -8,10 +8,10 @@
 :root{--ink:#34495e;--blue:#2477bd;--side:#7890aa;--line:#cbd3df}
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#26384a}
-body{background:#9fc9e4 url('file:///android_res/drawable-nodpi/home_bkg.png') center center/cover no-repeat}
+body{background:#9fc9e4 url('file:///android_res/drawable/home_bkg.png') center center/cover no-repeat}
 #app{height:100%;width:100%;display:flex;align-items:stretch;padding:2.2vh 2.5vw 2.2vh 31vw;position:relative}
 #app:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(45,93,132,.12),rgba(255,255,255,.06));pointer-events:none}
-.sidebar{position:absolute;z-index:2;left:31vw;top:2.2vh;bottom:2.2vh;width:10.2vw;min-width:145px;max-width:205px;background:rgba(111,139,168,.93) url('file:///android_res/drawable-nodpi/lefthand_navigation_background2x.png') center/cover no-repeat;border-radius:0 0 14px 14px;padding:2.2vh .55vw;color:#26384a;display:flex;flex-direction:column}
+.sidebar{position:absolute;z-index:2;left:31vw;top:2.2vh;bottom:2.2vh;width:10.2vw;min-width:145px;max-width:205px;background:rgba(111,139,168,.93) url('file:///android_res/drawable/lefthand_navigation_background2x.png') center/cover no-repeat;border-radius:0 0 14px 14px;padding:2.2vh .55vw;color:#26384a;display:flex;flex-direction:column}
 .logo{width:100%;height:auto;max-height:62px;object-fit:contain;margin:0 auto 1vh}
 .username{text-align:center;font-size:clamp(14px,1.25vw,20px);font-weight:bold;margin:.2vh 0 1vh}
 .balances{display:flex;justify-content:space-around;align-items:center;font-size:clamp(10px,.78vw,13px);margin-bottom:1vh}
@@ -51,20 +51,20 @@ body{background:#9fc9e4 url('file:///android_res/drawable-nodpi/home_bkg.png') c
 <body>
 <div id="app">
 <aside class="sidebar">
-<img class="logo" src="file:///android_res/drawable-nodpi/roblox_logo.png" alt="ROBLOX">
+<img class="logo" src="file:///android_res/drawable/roblox_logo.png" alt="ROBLOX">
 <div class="username">1234</div>
-<div class="balances"><span><img src="file:///android_res/drawable-nodpi/robux_symbol2x.png"> 0</span><span><img src="file:///android_res/drawable-nodpi/tix_symbol2x.png"> 0</span></div>
+<div class="balances"><span><img src="file:///android_res/drawable/robux_symbol2x.png"> 0</span><span><img src="file:///android_res/drawable/tix_symbol2x.png"> 0</span></div>
 <input class="search" placeholder="Search" onkeydown="if(event.key==='Enter')search(this.value)">
 <nav class="navlist">
-<div class="sideitem active" onclick="show('Home')"><img src="file:///android_res/drawable-nodpi/sb_account.png">Home</div>
-<div class="sideitem" onclick="show('Profile')"><img src="file:///android_res/drawable-nodpi/sb_my_roblox.png">My Roblox</div>
-<div class="sideitem" onclick="show('Games')"><img src="file:///android_res/drawable-nodpi/sb_games.png">Games</div>
-<div class="sideitem" onclick="show('Catalog')"><img src="file:///android_res/drawable-nodpi/sb_catalog.png">Catalog</div>
-<div class="sideitem" onclick="show('Community')"><img src="file:///android_res/drawable-nodpi/sb_community.png">Community</div>
-<div class="sideitem" onclick="show('Develop')"><img src="file:///android_res/drawable-nodpi/sb_develop.png">Develop</div>
-<div class="sideitem" onclick="show('Messages')"><img src="file:///android_res/drawable-nodpi/messages2x.png">Messages</div>
-<div class="sideitem" onclick="show('Groups')"><img src="file:///android_res/drawable-nodpi/groups2x.png">Groups</div>
-<div class="sideitem" onclick="show('Inventory')"><img src="file:///android_res/drawable-nodpi/inventory2x.png">Inventory</div>
+<div class="sideitem active" onclick="show('Home')"><img src="file:///android_res/drawable/sb_account.png">Home</div>
+<div class="sideitem" onclick="show('Profile')"><img src="file:///android_res/drawable/sb_my_roblox.png">My Roblox</div>
+<div class="sideitem" onclick="show('Games')"><img src="file:///android_res/drawable/sb_games.png">Games</div>
+<div class="sideitem" onclick="show('Catalog')"><img src="file:///android_res/drawable/sb_catalog.png">Catalog</div>
+<div class="sideitem" onclick="show('Community')"><img src="file:///android_res/drawable/sb_community.png">Community</div>
+<div class="sideitem" onclick="show('Develop')"><img src="file:///android_res/drawable/sb_develop.png">Develop</div>
+<div class="sideitem" onclick="show('Messages')"><img src="file:///android_res/drawable/messages2x.png">Messages</div>
+<div class="sideitem" onclick="show('Groups')"><img src="file:///android_res/drawable/groups2x.png">Groups</div>
+<div class="sideitem" onclick="show('Inventory')"><img src="file:///android_res/drawable/inventory2x.png">Inventory</div>
 </nav><div class="year">2014</div>
 </aside>
 <section class="shell">
@@ -74,7 +74,7 @@ body{background:#9fc9e4 url('file:///android_res/drawable-nodpi/home_bkg.png') c
 <div id="gameMenu" class="game-screen"><div class="menu-panel" id="menuPanel"></div></div>
 </div>
 <script>
-const root='file:///android_res/drawable-nodpi/';
+const root='file:///android_res/drawable/';
 const tiles=[['Games','games2x','Play games'],['Catalog','catalog2x','Browse avatar items'],['Inventory','inventory2x','Your items'],['Builders Club','builders_club2x','Membership'],['Profile','profile2x','Your profile'],['Messages','messages2x','Inbox'],['Groups','groups2x','Find and join groups'],['Leaderboards','leaderboards2x','Player rankings']];
 const games=['Games','Popular','Top Earning','Top Rated'];
 function tile(t){return '<div class="tile" onclick="show(\''+t[0]+'\')"><div class="art"><img src="'+root+t[1]+'.png"></div><div class="label">'+t[0]+'</div><div class="sub">'+t[2]+'</div></div>'}
