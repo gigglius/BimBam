@@ -4,13 +4,18 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.io.InputStream;
+import java.util.Locale;
+
 /**
  * Screenshot-driven classic Roblox 2014 dashboard for the BimBam Quest port.
- * The dashboard is kept separate from the original native in-game engine menus.
+ * Dashboard images are served directly from packaged Android drawable resources.
  */
 public class MainActivity extends Activity {
     private WebView dashboard;
@@ -30,10 +35,45 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(true);
         settings.setDefaultTextEncodingName("UTF-8");
         dashboard.setWebChromeClient(new WebChromeClient());
-        dashboard.setWebViewClient(new WebViewClient());
+        dashboard.setWebViewClient(new WebViewClient() {
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                return serveDashboardResource(request.getUrl().getPath());
+            }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                try {
+                    android.net.Uri uri = android.net.Uri.parse(url);
+                    if ("bimbam.local".equals(uri.getHost())) {
+                        return serveDashboardResource(uri.getPath());
+                    }
+                } catch (Exception ignored) { }
+                return super.shouldInterceptRequest(view, url);
+            }
+        });
         dashboard.setBackgroundColor(0xFFFFFFFF);
         setContentView(dashboard);
         dashboard.loadUrl("file:///android_asset/classic_dashboard.html");
+    }
+
+    private WebResourceResponse serveDashboardResource(String path) {
+        if (path == null || !path.startsWith("/res/")) return null;
+        String fileName = path.substring("/res/".length());
+        int dot = fileName.lastIndexOf('.');
+        if (dot <= 0) return null;
+        String name = fileName.substring(0, dot).toLowerCase(Locale.ROOT);
+        String ext = fileName.substring(dot + 1).toLowerCase(Locale.ROOT);
+        int resourceId = getResources().getIdentifier(name, "drawable", getPackageName());
+        if (resourceId == 0) return null;
+        try {
+            InputStream stream = getResources().openRawResource(resourceId);
+            String mime = "jpg".equals(ext) || "jpeg".equals(ext) ? "image/jpeg" : "image/png";
+            return new WebResourceResponse(mime, null, stream);
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     @Override public void onBackPressed() {
