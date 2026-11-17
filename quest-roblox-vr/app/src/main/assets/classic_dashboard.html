@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ROBLOX 2014 · BimBam</title>
+<style>
+:root{--navy:#123d78;--blue:#07539a;--bar1:#174d91;--bar2:#082d69;--side:#718ca9;--text:#26394d;--line:#c8d0d9;--green:#008b31}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#173f79}
+button,input,select{font:inherit}button{cursor:pointer}
+#app{height:100%;width:100%;display:flex;position:relative;overflow:hidden;background:#164078}
+#backdrop{position:absolute;inset:0;background:#164078 url('https://bimbam.local/res/home_bkg.png') center/cover no-repeat;opacity:.95}
+#frame{position:relative;z-index:1;margin:auto;width:min(96vw,1500px);height:min(94vh,920px);display:flex;background:transparent;border:1px solid #a9b8ca;border-radius:9px;overflow:hidden;box-shadow:0 5px 28px #0006}
+#account{width:225px;flex:none;background:#718ca9 url('https://bimbam.local/res/lefthand_navigation_background2x.png') center/cover no-repeat;padding:18px 12px 10px;display:flex;flex-direction:column;color:#263b50}
+#brand{height:55px;width:100%;object-fit:contain;margin:0 auto 7px}
+#userline{text-align:center;font-weight:bold;font-size:18px;margin:0 0 7px}
+#currency{display:flex;justify-content:center;gap:24px;font-size:13px;margin-bottom:12px}
+#currency img{width:15px;height:15px;object-fit:contain;vertical-align:middle}
+#accountSearch{height:34px;border:1px solid #c3cbd4;background:#fff;padding:0 9px;width:100%;margin:2px 0 9px}
+#sideNav{display:flex;flex-direction:column;gap:2px;overflow:auto}
+.side{display:flex;align-items:center;gap:9px;min-height:34px;padding:5px 8px;font-size:13px;border-radius:3px;cursor:pointer}
+.side img{width:17px;height:17px;object-fit:contain}.side.active,.side:hover{background:#ffffff45}
+#year{margin-top:auto;border-top:1px solid #4f6d8c66;text-align:center;padding-top:8px;font-size:9px;color:#506983}
+#main{min-width:0;flex:1;display:flex;flex-direction:column;background:transparent}
+#top{display:none}
+#top button{background:none;border:0;color:#303d4b;padding:12px 15px;font-size:13px}
+#top button.active{font-weight:bold;color:#174d85;border-bottom:3px solid #2375b7}
+#top .more{margin-left:auto}
+#page{flex:1;min-height:0;overflow:auto;padding:18px 20px 24px;background:#f3f5f8}
+h1{font-size:22px;color:#294c70;margin:0 0 14px}h2{font-size:18px;color:#294c70;margin:0 0 10px}h3{font-size:15px;margin:0 0 8px}
+.section{font-size:20px;color:#294c70;font-weight:bold;margin:2px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+/* Home dashboard proportions follow the wide Quest reference: two broad cards per row. */
+#page.homePage{padding:18px 18px 58px;background:transparent}
+.homePage .grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px;row-gap:18px}
+.homePage .tile{padding:0;border:0;background:transparent;box-shadow:none;display:flex;flex-direction:column;min-height:0}
+.homePage .tileArt{height:clamp(165px,23vh,225px);width:100%;background:transparent;border:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.homePage .tileArt img{display:block;width:100%;height:100%;object-fit:contain;object-position:center center;background:transparent}
+.homePage .tileName{height:42px;min-height:42px;padding:0 14px;display:flex;align-items:center;justify-content:flex-start;font-size:15px;order:2;background:linear-gradient(#267fc2,#07518f);color:#fff;font-weight:bold}
+.homePage .tileDesc{display:none}
+.homePage .subsection{margin-top:18px}
+.tile{background:transparent;border:0;padding:0;box-shadow:none;cursor:pointer;min-width:0}
+.tileArt{height:150px;background:#171717;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tileArt img{height:100%;width:100%;object-fit:cover}
+.tileName{height:34px;display:grid;place-items:center;background:linear-gradient(#267fc2,#07518f);color:white;font-weight:bold;font-size:14px}
+.tileDesc{height:25px;display:grid;place-items:center;color:#687887;font-size:11px;background:transparent}
+.subsection{margin-top:18px}
+.panel{background:white;border:1px solid #d1d8e0;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px #0001}
+.tabs{display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid #cbd3df;padding-bottom:8px;margin:0 0 13px}
+.tabs button,.filter{background:#e7ebf0;border:1px solid #c2cbd5;padding:8px 12px;color:#34485c;font-size:12px}
+.tabs button.active{background:#fff;border-bottom:2px solid #1c6cac;font-weight:bold}
+.blueBtn{background:linear-gradient(#247fc5,#07508f);border:1px solid #06477e;color:#fff;padding:8px 15px;font-weight:bold}
+.grayBtn{background:#edf0f3;border:1px solid #c4ccd5;padding:8px 13px;color:#34485c}
+.toolbar{background:linear-gradient(#1b5399,#092d69);height:42px;color:white;display:flex;align-items:center;padding:0 14px;gap:20px;margin:-18px -20px 14px}
+.toolbar strong{font-size:15px}.toolbar .money{margin-left:auto;color:#8cff8c}
+.searchrow{display:flex;gap:8px;margin-bottom:13px}
+.searchrow input{height:34px;flex:1;min-width:100px;border:1px solid #bdc6d0;border-radius:4px;padding:0 10px}
+.itemrow{display:flex;gap:14px;align-items:center;min-height:118px;border-bottom:1px solid #c5cbd2;background:#fff;padding:9px 10px}
+.itemthumb{width:72px;height:96px;flex:none;object-fit:contain}
+.iteminfo{min-width:0;flex:1}
+.itemname{font-weight:bold;color:#0052a0;font-size:16px;margin-bottom:5px}
+.itemdesc{font-size:12px;color:#222;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:3px 0}
+.price{font-weight:bold;color:var(--green);font-size:13px}
+.muted{font-size:12px;color:#687887}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:11px}
+.card{background:#fff;border:1px solid #d0d7df;padding:12px;box-shadow:0 1px 3px #0001;min-width:0}
+.card .thumb{height:100px;background:#e7ebef;display:grid;place-items:center;margin-bottom:9px}
+.card .thumb img{max-width:100%;max-height:100%;object-fit:contain}
+.card h3{color:#07539a}.card p{font-size:12px;color:#667584;min-height:30px}
+.detail{display:grid;grid-template-columns:minmax(170px,34%) 1fr;gap:16px}
+.preview{min-height:190px;background:#e2e7ec;border:1px solid #c5ccd4;display:grid;place-items:center;color:#718090}
+.statrow{display:flex;flex-wrap:wrap;gap:20px;border-top:1px solid #d7dce2;padding:12px 0;margin-top:12px;font-size:12px}
+.profilehead{display:flex;gap:15px;align-items:center;background:#fff;padding:14px;border:1px solid #d2d8e0;margin-bottom:14px}
+.avatar{width:90px;height:90px;object-fit:contain;background:#e8edf2}
+.empty{padding:25px;text-align:center;color:#788695;background:#fff;border:1px solid #d2d8e0}
+#gameMenu{display:none;position:absolute;z-index:10;inset:0;background:#0009;align-items:center;justify-content:center}
+#menuBox{width:min(430px,90vw);max-height:90%;overflow:auto;background:#1d1d1d;color:#fff;padding:20px;border:1px solid #888;box-shadow:0 5px 20px #0008}
+#menuBox h2{color:white;text-align:center}
+.menuAction{width:100%;padding:12px;margin:5px 0;background:#303030;color:white;border:1px solid #777}
+#homeInfo{display:none;position:absolute;z-index:5;left:18px;bottom:14px;width:36px;height:36px;border:1px solid #06477e;border-radius:50%;background:linear-gradient(#267fc2,#07518f);color:#fff;font:bold 22px Arial;line-height:32px;text-align:center;box-shadow:0 2px 5px #0005}#toast{position:absolute;z-index:20;bottom:12px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:9px 14px;border-radius:4px;display:none;font-size:12px}
+@media(max-width:700px){
+ #frame{width:100vw;height:100vh;border:0;border-radius:0;flex-direction:column}
+ #account{width:100%;height:auto;flex:none;padding:8px 10px;background:linear-gradient(#174c91,#082d68);color:white;display:grid;grid-template-columns:68px 1fr;grid-template-rows:auto auto;column-gap:10px}
+ #brand{display:block;grid-column:1;grid-row:1;width:68px;height:38px;margin:0;object-fit:contain}#userline{display:none}
+ #currency{grid-column:2;justify-content:flex-start;margin:0;gap:22px}
+ #accountSearch{grid-column:1/3;grid-row:2;margin:8px 0 2px;width:100%}
+ #sideNav{display:none}#year{display:none}
+ #top{height:42px;justify-content:flex-start;overflow-x:auto;padding:0 5px}
+ #top button{padding:10px 9px;font-size:12px;white-space:nowrap}
+ #page{padding:12px 10px 20px}
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .tile{padding:0}.homePage .tileArt{height:clamp(125px,19vh,175px)}.homePage .tileName{height:36px;min-height:36px;font-size:13px;padding:0 9px}.tileArt{height:82px}.tileName{height:27px;font-size:12px}.tileDesc{display:none}
+ .section{font-size:17px;margin:4px 0 8px}
+ .toolbar{margin:-12px -10px 10px;height:38px}
+ .itemrow{min-height:105px;padding:6px}.itemthumb{width:65px;height:88px}.itemname{font-size:14px}
+ .detail{grid-template-columns:1fr}.preview{min-height:150px}
+ .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+<div id="app"><div id="backdrop"></div>
+<div id="frame">
+<aside id="account">
+<img id="brand" src="https://bimbam.local/res/roblox_logo.png" alt="ROBLOX">
+<input id="accountSearch" placeholder="Search" onkeydown="if(event.key==='Enter')runSearch(this.value)">
+<nav id="sideNav" style="display:none">
+<div class="side active" data-page="Home" onclick="show('Home')"><img src="https://bimbam.local/res/sb_account.png">Home</div>
+<div class="side" data-page="Profile" onclick="show('Profile')"><img src="https://bimbam.local/res/sb_my_roblox.png">My Roblox</div>
+<div class="side" data-page="Games" onclick="show('Games')"><img src="https://bimbam.local/res/sb_games.png">Games</div>
+<div class="side" data-page="Catalog" onclick="show('Catalog')"><img src="https://bimbam.local/res/sb_catalog.png">Catalog</div>
+<div class="side" data-page="Community" onclick="show('Community')"><img src="https://bimbam.local/res/sb_community.png">Community</div>
+<div class="side" data-page="Develop" onclick="show('Develop')"><img src="https://bimbam.local/res/sb_develop.png">Develop</div>
+<div class="side" data-page="Messages" onclick="show('Messages')"><img src="https://bimbam.local/res/messages2x.png">Messages</div>
+<div class="side" data-page="Groups" onclick="show('Groups')"><img src="https://bimbam.local/res/groups2x.png">Groups</div>
+<div class="side" data-page="Inventory" onclick="show('Inventory')"><img src="https://bimbam.local/res/inventory2x.png">Inventory</div>
+<div class="side" data-page="Friends" onclick="show('Friends')"><img src="https://bimbam.local/res/profile2x.png">Friends</div>
+<div class="side" data-page="Leaderboards" onclick="show('Leaderboards')"><img src="https://bimbam.local/res/leaderboards2x.png">Leaderboards</div>
+</nav><div id="year" style="display:none">2014</div>
+</aside>
+<main id="main">
+<header id="top">
+<button data-top="Home" onclick="show('Home')">Home</button><button data-top="Games" onclick="show('Games')">Games</button><button data-top="Catalog" onclick="show('Catalog')">Catalog</button><button data-top="Develop" onclick="show('Develop')">Develop</button><button data-top="Groups" onclick="show('Groups')">Groups</button>
+<button class="more" onclick="openGameMenu()">☰</button>
+</header>
+<section id="page"></section><button id="homeInfo" aria-label="Information" onclick="toast('2014 Roblox menu')">i</button>
+</main>
+</div>
+<div id="gameMenu"><div id="menuBox"></div></div><div id="toast"></div>
+</div>
+<script>
+const R='https://bimbam.local/res/';
+const tileData=[
+ ['Games','games2x','Play games','Games'],['Catalog','catalog2x','Browse avatar items','Catalog'],['Inventory','inventory2x','Your items','Inventory'],
+ ['Builders Club','builders_club2x','Membership','Builders Club'],['Profile','profile2x','Your profile','Profile'],['Messages','messages2x','Inbox','Messages'],
+ ['Groups','groups2x','Find and join groups','Groups'],['Leaderboards','leaderboards2x','Player rankings','Leaderboards'],['Community','community2x','Community','Community']
+];
+const catalogItems=[
+ ["Bombo's Survival Knife","There's only one way out- and you c...","100"],
+ ["Bombo's Bow and Arrow","Killer instincts lead to killer arrows.","150"],
+ ["Bombo","When they say survival of the fittest...","250"],
+ ["Horror of the Pack Gift","The werewolf instinctively seeks to ...","500"]
+];
+let currentPage='Home',catalogCategory='All Categories',catalogSearch='',gameTab='Popular';
+function toast(s){let t=document.getElementById('toast');t.textContent=s;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
+function tile(t){return '<div class="tile" onclick="show(\''+t[3]+'\')"><div class="tileArt"><img src="'+R+t[1]+'.png" alt=""></div><div class="tileName">'+t[0]+'</div><div class="tileDesc">'+t[2]+'</div></div>'}
+function card(name,desc,action,art){return '<article class="card"><div class="thumb">'+(art?'<img src="'+R+art+'.png">':'')+'</div><h3>'+name+'</h3><p>'+desc+'</p><button class="blueBtn" onclick="'+action+'">View</button></article>'}
+function setActive(p){document.querySelectorAll('.side').forEach(e=>e.classList.toggle('active',e.dataset.page===p));document.querySelectorAll('#top button[data-top]').forEach(e=>e.classList.toggle('active',e.dataset.top===p))}
+function show(p){currentPage=p;setActive(p);document.getElementById('homeInfo').style.display=p==='Home'?'block':'none';let c=document.getElementById('page'),h='';c.className=p==='Home'?'homePage':'';
+if(p==='Home'){
+ h='<div class="section">Games</div><div class="grid">'+tileData.slice(0,4).map(tile).join('')+'</div><div class="grid">'+tileData.slice(4).map(tile).join('')+'</div>';
+}
+else if(p==='Games'){
+ h='<h1>Games</h1><div class="tabs">'+['Popular','Top Earning','Top Rated','Recently Updated','Featured'].map(x=>'<button class="'+(gameTab===x?'active':'')+'" onclick="gameTab=\''+x+'\';show(\'Games\')">'+x+'</button>').join('')+'</div><div class="cards">'+card('BimBam Classic Obby','Playable Quest test course: platforms, lava, checkpoints and finish','location.href=\'obby_test.html\'','games2x')+card('Classic Games','Browse games from the 2014 catalog','toast(\'Game data requires the BimBam game service\')','games2x')+card('Popular Games','Popular experiences','toast(\'Game data requires the BimBam game service\')','games2x')+card('Featured Games','Featured community creations','toast(\'Game data requires the BimBam game service\')','games2x')+'</div>';
+}
+else if(p==='Game Details'){
+ h='<h1>Game Details</h1><div class="panel"><div class="detail"><div class="preview"><img src="'+R+'default_thumbnail.png" style="max-width:100%;max-height:180px;object-fit:contain"></div><div><h2>Game title</h2><p class="muted">Creator and genre information</p><button class="blueBtn" onclick="toast(\'Game launching is not connected yet\')">Play</button><div class="statrow"><span>Visits —</span><span>Favorites —</span><span>Playing —</span></div></div></div><h3>Description</h3><p class="muted">Game description will be supplied by the hosted BimBam game service.</p></div><button class="grayBtn" onclick="show(\'Games\')">Back to Games</button>';
+}
+else if(p==='Catalog'){
+ h='<div class="toolbar"><strong>Catalog</strong><span class="money">R$ 0　 Tix 0</span></div><div class="searchrow"><select class="filter" id="catSelect" onchange="catalogCategory=this.value;renderCatalog()">'+['All Categories','Collectibles','Accessories','Body Parts','Clothing','Gear','Hats','Faces','Packages','Shirts','Pants','T-Shirts'].map(x=>'<option '+(catalogCategory===x?'selected':'')+'>'+x+'</option>').join('')+'</select><input id="catSearch" placeholder="Search" value="'+catalogSearch.replaceAll('"','&quot;')+'" oninput="catalogSearch=this.value;renderCatalog()"></div><div id="catalogRows"></div>';
+}
+else if(p==='Avatar'){
+ h='<h1>Character</h1><div class="tabs">'+['Avatar','Body','Clothing','Accessories','Animations','Costumes'].map((x,i)=>'<button class="'+(i===0?'active':'')+'" onclick="toast(\''+x+' editor needs avatar service integration\')">'+x+'</button>').join('')+'</div><div class="panel"><div class="detail"><div class="preview"><img src="'+R+'default_thumbnail.png" style="max-width:100%;max-height:190px;object-fit:contain"></div><div><h2>Avatar Preview</h2><p class="muted">Your currently equipped avatar items will appear here.</p><button class="blueBtn" onclick="toast(\'Avatar saving is not connected yet\')">Save Avatar</button></div></div></div><h2>Currently Wearing</h2><div class="cards">'+['Hats','Hair','Face','Shirts','Pants','Gear'].map(x=>card(x,'Equipped items','toast(\'Inventory service not connected\')')).join('')+'</div>';
+}
+else if(p==='Profile'){
+ h='<h1>My Roblox</h1><div class="profilehead"><img class="avatar" src="'+R+'default_thumbnail.png"><div><h2>1234</h2><div class="muted">Member</div><p class="muted">Profile information from the account server will appear here.</p></div></div><div class="tabs"><button class="active">Profile</button><button onclick="show(\'Friends\')">Friends</button><button onclick="show(\'Groups\')">Groups</button><button onclick="show(\'Inventory\')">Inventory</button></div><div class="panel"><h3>Statistics</h3><div class="statrow"><span>Friends —</span><span>Place Visits —</span><span>Forum Posts —</span></div></div><h2>Favorites</h2><div class="empty">No favorites to display.</div>';
+}
+else if(p==='Groups'){
+ h='<h1>Groups</h1><div class="tabs"><button class="active" onclick="show(\'Groups\')">My Groups</button><button onclick="toast(\'Group search needs server connection\')">Search Groups</button><button onclick="toast(\'Group creation needs server connection\')">Create Group</button></div><div class="empty">Your groups will appear here when connected to the BimBam account server.</div>';
+}
+else if(p==='Inventory'){
+ h='<h1>Inventory</h1><div class="tabs">'+['All','Hats','Gear','Faces','Shirts','Pants','T-Shirts','Packages','Animations'].map(x=>'<button onclick="inventoryCategory=\''+x+'\';toast(\'Inventory category: '+x+'\')">'+x+'</button>').join('')+'</div><div class="empty">Your inventory items will appear here after account-server integration.</div>';
+}
+else if(p==='Messages'){
+ h='<h1>Messages</h1><div class="tabs"><button class="active">Inbox</button><button onclick="toast(\'Sent messages need account service\')">Sent</button><button onclick="toast(\'Archived messages need account service\')">Archived</button></div><div class="empty">You have no messages to display.</div>';
+}
+else if(p==='Friends'){
+ h='<h1>Friends</h1><div class="tabs"><button class="active">Friends</button><button onclick="toast(\'Friend requests need account service\')">Requests</button><button onclick="toast(\'Find friends needs account service\')">Find Friends</button></div><div class="empty">Your friends list will appear here after account-server integration.</div>';
+}
+else if(p==='Leaderboards'){
+ h='<h1>Leaderboards</h1><div class="tabs"><button class="active">Top Players</button><button>Most Visits</button><button>Most Friends</button></div><div class="empty">Leaderboard data is not available until the game service is connected.</div>';
+}
+else if(p==='Community'){
+ h='<h1>Community</h1><div class="cards">'+card('Groups','Find communities','show(\'Groups\')','groups2x')+card('Forums','Community discussions','toast(\'Forum service is not connected\')','community2x')+card('Leaderboards','Top players','show(\'Leaderboards\')','leaderboards2x')+'</div>';
+}
+else if(p==='Develop'){
+ h='<h1>Develop</h1><div class="cards">'+card('My Creations','Places, models, and decals','toast(\'Creator tools need server integration\')','games2x')+card('Library','Browse models and decals','toast(\'Library service is not connected\')','catalog2x')+'</div>';
+}
+else if(p==='Builders Club'){
+ h='<h1>Builders Club</h1><div class="panel"><h2>Membership</h2><p class="muted">Membership status will be shown by the account service.</p></div>';
+}
+else {h='<h1>'+p+'</h1>'}
+c.innerHTML=h;if(p==='Catalog')renderCatalog();
+}
+function renderCatalog(){let host=document.getElementById('catalogRows');if(!host)return;let q=(catalogSearch||'').toLowerCase();let rows=catalogItems.filter(x=>(!q||x.join(' ').toLowerCase().includes(q)));host.innerHTML=rows.map((x,i)=>'<div class="itemrow"><img class="itemthumb" src="'+R+(i===2?'default_thumbnail.png':'crate.png')+'" onerror="this.src=\''+R+'default_thumbnail.png\'"><div class="iteminfo"><div class="itemname">'+x[0]+'</div><div style="font-weight:bold;color:#888">iOS</div><div class="itemdesc">'+x[1]+'</div><div class="price">R$ '+x[2]+'</div></div></div>').join('')||'<div class="empty">No items found.</div>'}
+function runSearch(q){catalogSearch=q;show('Games');toast('Search is ready; live search needs the game catalog service')}
+function openGameMenu(){let m=document.getElementById('gameMenu'),b=document.getElementById('menuBox');m.style.display='flex';b.innerHTML='<h2>Game Menu</h2>'+['Resume Game','Settings','Report Abuse'].map(x=>'<button class="menuAction" onclick="menuAction(\''+x+'\')">'+x+'</button>').join('')+'<button class="menuAction" onclick="closeGameMenu()">Close</button>'}
+function closeGameMenu(){document.getElementById('gameMenu').style.display='none'}
+function menuAction(x){let b=document.getElementById('menuBox');if(x==='Resume Game'){closeGameMenu();return}if(x==='Settings'){b.innerHTML='<h2>Settings</h2><p>Camera Mode　<select><option>Classic</option><option>Follow</option></select></p><p>Movement Mode　<select><option>Default</option><option>Classic</option></select></p><p>Graphics Quality　<input type="range" min="1" max="10" value="5"></p><p>Volume　<input type="range" min="0" max="100" value="80"></p><button class="menuAction" onclick="openGameMenu()">Back</button>';return}if(x==='Report Abuse'){b.innerHTML='<h2>Report Abuse</h2><select id="reportReason"><option>Choose One</option><option>Inappropriate language</option><option>Scamming</option><option>Exploiting</option><option>Other</option></select><p><textarea id="reportText" placeholder="Description" style="width:100%;min-height:80px"></textarea></p><button class="menuAction" onclick="toast(\'Report submission needs server integration\');closeGameMenu()">Submit Report</button><button class="menuAction" onclick="openGameMenu()">Cancel</button>'}}
+document.getElementById('gameMenu').addEventListener('click',e=>{if(e.target.id==='gameMenu')closeGameMenu()});
+show('Home');
+</script>
+</body></html>
