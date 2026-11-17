@@ -10,7 +10,7 @@
 button,input,select{font:inherit}button{cursor:pointer}
 #app{height:100%;width:100%;display:flex;position:relative;overflow:hidden;background:#164078}
 #backdrop{position:absolute;inset:0;background:#164078 url('https://bimbam.local/res/home_bkg.png') center/cover no-repeat;opacity:.95}
-#frame{position:relative;z-index:1;margin:auto;width:min(96vw,1500px);height:min(94vh,920px);display:flex;background:#e9edf4;border:1px solid #a9b8ca;border-radius:9px;overflow:hidden;box-shadow:0 5px 28px #0006}
+#frame{position:relative;z-index:1;margin:auto;width:min(96vw,1500px);height:min(94vh,920px);display:flex;background:transparent;border:1px solid #a9b8ca;border-radius:9px;overflow:hidden;box-shadow:0 5px 28px #0006}
 #account{width:225px;flex:none;background:#718ca9 url('https://bimbam.local/res/lefthand_navigation_background2x.png') center/cover no-repeat;padding:18px 12px 10px;display:flex;flex-direction:column;color:#263b50}
 #brand{height:55px;width:100%;object-fit:contain;margin:0 auto 7px}
 #userline{text-align:center;font-weight:bold;font-size:18px;margin:0 0 7px}
@@ -21,7 +21,7 @@ button,input,select{font:inherit}button{cursor:pointer}
 .side{display:flex;align-items:center;gap:9px;min-height:34px;padding:5px 8px;font-size:13px;border-radius:3px;cursor:pointer}
 .side img{width:17px;height:17px;object-fit:contain}.side.active,.side:hover{background:#ffffff45}
 #year{margin-top:auto;border-top:1px solid #4f6d8c66;text-align:center;padding-top:8px;font-size:9px;color:#506983}
-#main{min-width:0;flex:1;display:flex;flex-direction:column;background:#f7f8fa}
+#main{min-width:0;flex:1;display:flex;flex-direction:column;background:transparent}
 #top{height:58px;flex:none;background:#fff;border-bottom:1px solid #d5dce5;display:flex;align-items:center;justify-content:space-around;padding:0 12px}
 #top button{background:none;border:0;color:#303d4b;padding:12px 15px;font-size:13px}
 #top button.active{font-weight:bold;color:#174d85;border-bottom:3px solid #2375b7}
@@ -31,11 +31,11 @@ h1{font-size:22px;color:#294c70;margin:0 0 14px}h2{font-size:18px;color:#294c70;
 .section{font-size:20px;color:#294c70;font-weight:bold;margin:2px 0 12px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 /* Home dashboard proportions follow the wide Quest reference: two broad cards per row. */
-#page.homePage{padding:16px 18px 24px;background:#f3f5f8}
+#page.homePage{padding:16px 18px 24px;background:transparent}
 .homePage .grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;row-gap:12px}
 .homePage .tile{padding:0;border:0;background:transparent;box-shadow:none}
-.homePage .tileArt{height:clamp(118px,16vh,168px);width:100%;background:transparent;border:0;display:flex;align-items:center;justify-content:center}
-.homePage .tileArt img{display:block;width:100%;height:100%;object-fit:cover;object-position:center center;background:transparent}
+.homePage .tileArt{height:clamp(118px,16vh,168px);width:100%;background:transparent;border:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.homePage .tileArt img{display:block;width:100%;height:100%;object-fit:contain;object-position:center center;background:transparent}
 .homePage .tileName{height:34px;font-size:14px}
 .homePage .tileDesc{height:24px;font-size:11px;background:transparent;color:#687887}
 .homePage .subsection{margin-top:18px}
