@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>BimBam Classic Obby</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#65e66a;font-family:Arial,sans-serif;color:white}canvas{display:block;width:100%;height:100%;touch-action:none}
+#top{position:absolute;top:0;left:0;right:0;height:42px;background:#111c;display:flex;align-items:center;gap:8px;padding:4px 10px}
+button{border:1px solid #aaa;background:linear-gradient(#777,#333);color:white;border-radius:4px;padding:7px 16px;font-weight:bold;font-size:15px}
+#title{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:clamp(12px,2vw,22px);text-shadow:0 1px 3px #000}
+#hud{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:min(390px,88vw);text-align:center}
+#slots{display:flex;justify-content:center;gap:8px;padding:7px;background:#16436c88;border-top:2px solid #8dc9f4;border-bottom:2px solid #8dc9f4}
+.slot{width:78px;height:68px;border:2px solid #8bb6d4;border-radius:8px;background:#143c60cc;display:grid;place-items:center;font-size:12px}
+.slot b{font-size:24px;display:block}#health{height:24px;border:2px solid #111;background:#075c0c;margin:6px auto 0;width:95%;text-align:right;padding-right:8px;font-weight:bold;line-height:20px;color:white;background-image:linear-gradient(90deg,#00b51b 0%,#00b51b 100%)}
+#notice{position:absolute;top:54px;left:50%;transform:translateX(-50%);background:#111b;padding:8px 14px;border-radius:6px;font-weight:bold;opacity:0;transition:opacity .2s}
+#help{position:absolute;right:12px;top:50px;background:#1119;padding:8px 10px;border-radius:5px;font-size:12px;max-width:210px}
+#menu{display:none;position:absolute;inset:0;background:#0009;align-items:center;justify-content:center}#menuBox{background:#222;padding:22px;width:min(320px,90vw);text-align:center;border:1px solid #aaa}#menuBox button{display:block;width:100%;margin:8px 0}
+@media(max-width:600px){#help{display:none}#top{height:38px}#hud{bottom:6px}}
+</style></head><body>
+<canvas id="view"></canvas>
+<div id="top"><button onclick="say('Chat is not connected in the local test map yet')">Chat</button><button onclick="toggleMenu()">Menu</button><div id="title">BimBam Classic Obby · Test Place</div></div>
+<div id="help">Move: WASD / arrow keys<br>Jump: Space / gamepad A<br>Quest: use left stick + A (when controller input is available)</div>
+<div id="notice"></div>
+<div id="hud"><div id="slots"><div class="slot"><b>🧍</b>Character</div><div class="slot"><b>🚩</b>Checkpoint</div><div class="slot"><b>🏁</b>Finish</div></div><div id="health">Health</div></div>
+<div id="menu"><div id="menuBox"><h2>Game Menu</h2><button onclick="toggleMenu()">Resume</button><button onclick="resetPlayer()">Reset Character</button><button onclick="location.href='classic_dashboard.html'">Leave Game</button></div></div>
+<script>
+const canvas=document.getElementById('view'),ctx=canvas.getContext('2d');let W=0,H=0,dpr=1;
+function resize(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}addEventListener('resize',resize);resize();
+const platforms=[
+{x:0,z:0,w:12,d:10,y:0,c:'#258ef0',name:'Start'},
+{x:0,z:13,w:5,d:4,y:1,c:'#f23832'},{x:0,z:20,w:4,d:4,y:2,c:'#ffcf22'},
+{x:4,z:27,w:4,d:4,y:2.8,c:'#19c65a'},{x:-2,z:34,w:4,d:4,y:3.5,c:'#f23832'},
+{x:-6,z:41,w:5,d:4,y:4,c:'#258ef0'},{x:-6,z:49,w:4,d:4,y:4.7,c:'#ffcf22'},
+{x:0,z:57,w:5,d:4,y:5.3,c:'#19c65a'},{x:6,z:65,w:5,d:5,y:5.8,c:'#258ef0',name:'Finish'}
+];
+const hazards=[{x:0,z:8,w:14,d:3,y:-.25},{x:0,z:16.5,w:12,d:2,y:-.25},{x:1,z:30,w:10,d:2,y:-.25},{x:-4,z:45,w:8,d:2,y:-.25}];
+const obstacles=[{x:-2,z:24,w:1.1,d:5,y:2.4,a:0},{x:2,z:38,w:1,d:5,y:3.4,a:0},{x:0,z:53,w:1,d:5,y:5,a:0}];
+let p={x:0,z:2,y:0,vy:0,ground:true,hp:100,checkpoint:0,respawn:0},keys={},last=0,menu=false,noticeTimer=0;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function say(s){let n=document.getElementById('notice');n.textContent=s;n.style.opacity=1;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>n.style.opacity=0,1800)}
+addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space')e.preventDefault();if(e.key==='Escape')toggleMenu();if(e.key.toLowerCase()==='r')resetPlayer()});
+addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+function toggleMenu(){menu=!menu;document.getElementById('menu').style.display=menu?'flex':'none'}
+function resetPlayer(){p.x=0;p.z=platforms[p.checkpoint].z-2;p.y=platforms[p.checkpoint].y;p.vy=0;p.ground=true;p.hp=100;menu=false;document.getElementById('menu').style.display='none';say('Character reset')}
+function project(x,y,z){let camZ=p.z-8,camY=p.y+5.5;let dx=x-p.x,dz=z-camZ,dy=y-camY;let depth=dz+18;let scale=650/Math.max(8,depth);return {x:W/2+dx*scale,y:H*.48-dy*scale+dz*scale*.12,s:scale}}
+function poly(points,fill,stroke){ctx.beginPath();points.forEach((v,i)=>{let q=project(v[0],v[1],v[2]);if(!i)ctx.moveTo(q.x,q.y);else ctx.lineTo(q.x,q.y)});ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke()}}
+function box3(x,z,w,d,y,h,c){let a=[x-w/2,z-d/2],b=[x+w/2,z-d/2],cc=[x+w/2,z+d/2],dd=[x-w/2,z+d/2];poly([[a[0],y+h,a[1]],[b[0],y+h,b[1]],[cc[0],y+h,cc[1]],[dd[0],y+h,dd[1]]],c);poly([[b[0],y,b[1]],[cc[0],y,cc[1]],[cc[0],y+h,cc[1]],[b[0],y+h,b[1]]],shade(c,-35));poly([[dd[0],y,dd[1]],[cc[0],y,cc[1]],[cc[0],y+h,cc[1]],[dd[0],y+h,dd[1]]],shade(c,-18))}
+function shade(hex,amt){let n=parseInt(hex.slice(1),16),r=clamp((n>>16)+amt,0,255),g=clamp(((n>>8)&255)+amt,0,255),b=clamp((n&255)+amt,0,255);return '#'+[r,g,b].map(v=>Math.round(v).toString(16).padStart(2,'0')).join('')}
+function drawWorld(){ctx.fillStyle='#65e66a';ctx.fillRect(0,0,W,H);let horizon=H*.32;ctx.fillStyle='#54dfff';ctx.fillRect(0,horizon,W,H-horizon);
+poly([[-100,0,-100],[100,0,-100],[100,0,100],[-100,0,100]],'#64e66b');
+for(let z=-4;z<90;z+=4){poly([[-100,.01,z],[100,.01,z],[100,.01,z+.06],[-100,.01,z+.06]],'#5bd963')}
+hazards.forEach(h=>box3(h.x,h.z,h.w,h.d,h.y,.18,'#ff281e'));
+platforms.forEach((b,i)=>{box3(b.x,b.z,b.w,b.d,b.y,.55,b.c);if(b.name){let q=project(b.x,b.y+.8,b.z);ctx.fillStyle='#fff';ctx.font='bold 13px Arial';ctx.textAlign='center';ctx.fillText(b.name,q.x,q.y)}});
+obstacles.forEach((o,i)=>{o.a+=.025;let q=project(o.x,o.y+2,o.z);ctx.save();ctx.translate(q.x,q.y);ctx.rotate(Math.sin(o.a)*.45);ctx.fillStyle='#777';ctx.fillRect(-q.s*.45,-q.s*2,q.s*.9,q.s*4);ctx.fillStyle='#aaa';for(let j=-2;j<=2;j++){ctx.fillRect(-q.s*.6,j*q.s*.65,q.s*1.2,q.s*.12)}ctx.restore()});
+drawPlayer();
+}
+function drawPlayer(){let q=project(p.x,p.y+1.2,p.z),s=q.s;ctx.save();ctx.translate(q.x,q.y);ctx.fillStyle='#0004';ctx.beginPath();ctx.ellipse(0,s*.1,s*.48,s*.18,0,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#1684d8';ctx.fillRect(-s*.35,-s*.05,s*.7,s*.72);ctx.fillStyle='#f3c49b';ctx.fillRect(-s*.3,-s*.78,s*.6,s*.6);ctx.fillStyle='#ffd52b';ctx.fillRect(-s*.31,-s*.83,s*.62,s*.16);ctx.fillStyle='#1684d8';ctx.fillRect(-s*.55,s*.02,s*.18,s*.55);ctx.fillRect(s*.37,s*.02,s*.18,s*.55);ctx.fillStyle='#8b5a35';ctx.fillRect(-s*.32,s*.67,s*.25,s*.45);ctx.fillRect(s*.08,s*.67,s*.25,s*.45);ctx.restore()}
+function update(dt){if(menu)return;let ax=0,az=0;let gp=navigator.getGamepads&&navigator.getGamepads()[0];if(gp){ax=gp.axes[0]||0;az=gp.axes[1]||0;if(gp.buttons[0]?.pressed&&p.ground)p.vy=8.5}
+if(keys.a||keys.arrowleft)ax=-1;if(keys.d||keys.arrowright)ax=1;if(keys.w||keys.arrowup)az=-1;if(keys.s||keys.arrowdown)az=1;if((keys[' ']||keys.w&&keys.shift)&&p.ground)p.vy=8.5;
+let speed=7;p.x+=ax*speed*dt;p.z+=-az*speed*dt;p.x=clamp(p.x,-14,14);
+let prevY=p.y;p.vy-=20*dt;p.y+=p.vy*dt;p.ground=false;
+for(let b of platforms){if(Math.abs(p.x-b.x)<b.w/2-.15&&Math.abs(p.z-b.z)<b.d/2-.15&&prevY>=b.y-.05&&p.y<=b.y&&p.vy<=0){p.y=b.y;p.vy=0;p.ground=true;}}
+if(p.y<-.8){p.hp-=35;resetPlayer();say('You fell! Respawning at checkpoint');return}
+for(let h of hazards){if(Math.abs(p.x-h.x)<h.w/2&&Math.abs(p.z-h.z)<h.d/2&&p.y<1){p.hp-=40;resetPlayer();say('Lava! Back to checkpoint');return}}
+for(let i=1;i<platforms.length;i++){let b=platforms[i];if(Math.abs(p.x-b.x)<b.w/2&&Math.abs(p.z-b.z)<b.d/2&&p.y<=b.y+.1&&p.y>=b.y-.1&&i>p.checkpoint){p.checkpoint=i;say('Checkpoint reached!')}}
+if(p.z>68){say('OBBY COMPLETE! Great job!');p.z=2;p.checkpoint=0}
+document.getElementById('health').style.background='linear-gradient(90deg,#00b51b '+p.hp+'%,#263326 '+p.hp+'%)';}
+function frame(t){let dt=Math.min(.04,(t-last)/1000||0);last=t;update(dt);drawWorld();requestAnimationFrame(frame)}requestAnimationFrame(frame);
+</script></body></html>
