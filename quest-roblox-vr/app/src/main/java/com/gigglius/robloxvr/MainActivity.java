@@ -63,7 +63,6 @@ public class MainActivity extends Activity {
             View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         Log.i("BimBamEngine", LegacyEngineBootstrap.inspect(this));
-        Log.i("BimBamEngine", LegacyEngineBootstrap.inspect(this));
         render();
     }
 
@@ -120,7 +119,7 @@ public class MainActivity extends Activity {
         balances.setBackground(panel(NAVY, 0));
         TextView robux = text("R$ 0", 15, true);
         robux.setGravity(Gravity.CENTER);
-        TextView tix = text("TIX 100", 15, true);
+        TextView tix = text("TIX 0", 15, true);
         tix.setGravity(Gravity.CENTER);
         balances.addView(robux, new LinearLayout.LayoutParams(0, -1, 1));
         balances.addView(tix, new LinearLayout.LayoutParams(0, -1, 1));
