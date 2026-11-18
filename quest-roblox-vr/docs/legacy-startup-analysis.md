@@ -25,6 +25,18 @@ The archived Roblox 2014 APK contained `lib/armeabi/libroblox.so`, `lib/armeabi/
 8. `onActivityResult` delegates to `StoreManager.handleActivityResult()` and falls back to the Android Activity implementation when unhandled.
 9. `onStop` unbinds the service, invokes `Utils.contextSwitchExclusiveDialog(context)`, then calls the Android Activity implementation.
 
+## Recovered source artifact: RobloxServiceActivity$1
+
+The repository contains `RobloxServiceActivity1.txt`, a decompiled smali listing for the anonymous `ServiceConnection` inner class. It independently confirms the service handshake:
+
+1. `onServiceConnected(ComponentName, IBinder)` wraps the binder in an Android `Messenger` and stores it on the enclosing activity.
+2. It obtains message code 1, sets `replyTo` to the activity's Messenger, and sends the registration message to the service.
+3. It calls `doNotifyService(1, 0)` to send the connected notification.
+4. It then invokes the enclosing activity's `onServiceConnected()` callback and increments the bind counter.
+5. `onServiceDisconnected` only logs the disconnect in this inner class.
+
+This file is useful original Android glue evidence, but it is **not** the missing `ActivityGlView`, `ActivityNativeMain`, `RobloxService`, or native engine source. It does not reveal the arguments passed to `nativeStartGame`.
+
 ## Required original dependencies
 
 The superclass references `RobloxService`, `RobloxServiceActivity$IncomingHandler`, `RobloxServiceActivity$1` (ServiceConnection), `StoreManager`, `Utils`, and Google Play Services utility `GooglePlayServicesUtil`. Recreating only the superclass cannot restore startup.
@@ -54,11 +66,11 @@ The superclass references `RobloxService`, `RobloxServiceActivity$IncomingHandle
 ## Quest 3 / VR constraints and next milestone
 
 - Do not package or load the original 32-bit `armeabi` engine on Quest 3.
-- A real Quest 3 engine requires original engine source plus an arm64 port/rebuild, or a separately licensed compatible arm64 implementation.
+- A real Quest 3 engine requires original engine source plus an arm64 port/rebuild, or a separately licensed compatible engine.
 - Even with an arm64 engine, the legacy SurfaceView renderer is not automatically OpenXR: stereo rendering, head pose, controller input, and VR frame submission must be implemented separately.
 - The exact native launch arguments and surface lifecycle must be recovered from the matching `ActivityGlView.smali` and `ActivityNativeMain.smali` before invoking JNI.
 - Keep proprietary native libraries and original OBB assets private; do not commit them to this public repository.
 
 ## Next source needed
 
-Provide decompiled text for `ActivityNativeMain.smali`, `ActivityGlView.smali`, `XAPKManager.smali`, and `StoreManager.smali`. The original 32-bit binary by itself is insufficient for a Quest 3 port.
+The next useful source files are the matching decompiled text for `ActivityGlView.smali`, `ActivityNativeMain.smali`, `RobloxService.smali`, `XAPKManager.smali`, and `StoreManager.smali`. The original 32-bit binary by itself is insufficient for a Quest 3 port.
