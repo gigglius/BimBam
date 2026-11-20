@@ -52,7 +52,7 @@ public final class LegacyEngineBootstrap {
         if (!arm64) {
             report.append("BLOCKED: this build requires an ARM64 Quest runtime.");
         } else if (!engine.isFile() || !audio.isFile()) {
-            report.append("BLOCKED: no ARM64 Roblox engine/FM​​OD pair is packaged. ")
+            report.append("BLOCKED: no ARM64 Roblox engine/FMOD pair is packaged. ")
                     .append("The recovered APK contains ARM32 binaries only; they cannot be loaded here.");
         } else if (!obb.isFile() || !EXPECTED_OBB_MD5.equals(md5(obb))) {
             report.append("BLOCKED: the original expansion archive is missing or does not match.");
