@@ -11,7 +11,7 @@ Source: uploaded APK's classes.dex (DEX 035). This report records declaration-le
 | nativeShutDownGraphics | (Surface) -> void | Graphics shutdown |
 | nativeStopGame | () -> void | Stop native game |
 | nativeCallMessagesFromMainThread | () -> void | Main-thread message pump |
-| nativePassInput | (int, int, int, int, int) -> void | Input bridge (descriptor needs exact DEX inventory verification; export exists) |
+
 | nativePassText | (long, String) -> void | Text input bridge |
 | nativeReleaseFocus | (long) -> void | Focus release |
 | nativeOnLowMemory | () -> void | Low-memory callback |
@@ -29,7 +29,7 @@ Source: uploaded APK's classes.dex (DEX 035). This report records declaration-le
 - nativeReleaseFocus: `(J)V`
 - nativeOnLowMemory: `()V`
 
-The native `nativePassInput` export was previously found in libroblox.so, but this report does not yet verify its declaration descriptor. Do not rely on the tentative table row above; its descriptor remains **unverified**.
+The native `nativePassInput` export was previously found in libroblox.so, but its Java declaration descriptor remains **unverified**.
 
 ## Bytecode call references observed
 
