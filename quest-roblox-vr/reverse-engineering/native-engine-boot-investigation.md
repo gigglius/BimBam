@@ -60,3 +60,55 @@ The original native source code (or another legally usable source/build path) is
 ## Safety / distribution
 
 Keep the original APK, OBB, and proprietary shared libraries private. Do not commit those binaries to the public BimBam repository. Commit only analysis notes and independently authored compatibility code.
+
+
+## JNI symbol mapping and first-frame trace status (2026-11-26)
+
+### Java bridge declarations ↔ exported native symbols
+
+The report records these exports from the original ARM32 `libroblox.so`. JNI name-based mapping can be matched for the following declarations where the names and class match:
+
+| Java native declaration | Exported symbol | Match status |
+|---|---|---|
+| `ActivityGlView.nativeStartGame` | `Java_com_roblox_client_ActivityGlView_nativeStartGame` | Name/class match; body/address not analyzed |
+| `ActivityGlView.nativeStartUpGraphics` | `Java_com_roblox_client_ActivityGlView_nativeStartUpGraphics` | Name/class match; body/address not analyzed |
+| `ActivityGlView.nativeShutDownGraphics` | `Java_com_roblox_client_ActivityGlView_nativeShutDownGraphics` | Name/class match; body/address not analyzed |
+| `ActivityGlView.nativeStopGame` | `Java_com_roblox_client_ActivityGlView_nativeStopGame` | Name/class match; body/address not analyzed |
+| `ActivityGlView.nativeCallMessagesFromMainThread` | `Java_com_roblox_client_ActivityGlView_nativeCallMessagesFromMainThread` | Name/class match; body/address not analyzed |
+| `ActivityGlView.nativePassText` | `Java_com_roblox_client_ActivityGlView_nativePassText` | Name/class match; body/address not analyzed |
+| `ActivityGlView.nativeReleaseFocus` | `Java_com_roblox_client_ActivityGlView_nativeReleaseFocus` | Name/class match; body/address not analyzed |
+| `ActivityGlView.nativeOnLowMemory` | `Java_com_roblox_client_ActivityGlView_nativeOnLowMemory` | Name/class match; body/address not analyzed |
+
+Additional exported JNI functions reported by the original library, not currently declared in the reconstructed Java bridge:
+
+- `ActivityGlView.nativePassInput`
+- `InputListener.nativeCharacterMove`
+- `InputListener.nativeCharacterJump`
+- `InputListener.nativeCameraRotate`
+- `InputListener.nativeFireWeapon`
+- `RobloxSettings.nativeSetBaseUrl`
+- `RobloxSettings.nativeSetCacheDirectory`
+- `RobloxSettings.nativeSetFilesDirectory`
+
+The report's current Java bridge has 11 declarations; eight are matched by exported name/class in this list. Three declarations (`nativeHandleBackPressed`, `nativeInGamePurchaseFinished`, `nativeVideoAdFinished`) do not appear in the recovered export list. This is not proof they are absent from the binary: they could be dynamically registered, omitted from the earlier symbol extraction, or be declarations from another client revision. Verify with a full symbol/registration scan and DEX class/signature comparison.
+
+### Native initialization function
+
+`JNI_OnLoad` is confirmed as an exported symbol in the investigation report. Its implementation has not been disassembled, so it is not yet confirmed whether it registers methods, initializes global runtime state, or performs any engine startup. The three graphics/game JNI functions are the visible candidate entry points, but none is proven to be the engine's internal initialization routine.
+
+### Surface → graphics trace
+
+Current verified facts: Java declarations accept an Android `Surface`; repository `SurfaceHolder.Callback` methods are empty; the original smali files are not in the repo. Thus the original `Surface` conversion/retention, EGL/native-window acquisition, thread, and call ordering are unknown.
+
+### Scene, camera, render, and presentation
+
+No recovered disassembly or runtime trace currently identifies when a scene becomes drawable, when a camera is attached/initialized, the first render function, or the buffer presentation/swap function. Do not label guessed engine internals as recovered. These are blocked on native code/disassembly and, for launch order, matching DEX method bodies.
+
+### Evidence checklist to close the trace
+
+1. Full `libroblox.so` dynamic and static symbol output; JNI_OnLoad disassembly and any `RegisterNatives` table.
+2. Native disassembly/call graph for the five JNI startup/graphics functions: `nativeStartUpGraphics`, `nativeStartGame`, `nativeCallMessagesFromMainThread`, `nativeShutDownGraphics`, `nativeStopGame`.
+3. DEX/smali bodies for `ActivityNativeMain`, `ActivityGlView`, service readiness and Surface callbacks to prove Java ordering and arguments.
+4. Renderer call graph from graphics initialization to first draw and presentation; identify camera/scene readiness by code paths and data flow, not guessed names.
+
+The legacy library is ARM32. This investigation is for source/compatibility understanding; it is not a runnable Quest 3 native engine. Do not load the original library into the arm64 Quest process.
