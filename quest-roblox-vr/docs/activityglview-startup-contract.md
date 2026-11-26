@@ -92,3 +92,43 @@ Activity created
 - Surface callback order and native call order: unknown.
 - Native launch arguments and boolean semantics: unknown.
 - First rendered frame path: unknown.
+
+
+## 8. First-frame call graph reconstruction (2026-11-26)
+
+This graph is a hypothesis-driven lifecycle, not a recovered original trace:
+
+```
+Android process / Activity entry
+  -> MainActivity.onCreate() [confirmed menu shell only]
+  -> user launches game [handoff missing]
+  -> ActivityGlView creation [class exists; launch wiring missing]
+  -> service + asset readiness [original contract not independently verified]
+  -> SurfaceHolder.Callback.surfaceCreated(surface)
+  -> native graphics initialization [candidate: nativeStartUpGraphics(surface, density)]
+  -> native game initialization [candidate: nativeStartGame(surface, arg1, arg2, density, flag)]
+  -> engine scene/camera/render setup [native implementation unavailable]
+  -> render submission
+  -> presentation/swap
+  -> first visible frame [not observed]
+```
+
+### First-frame milestones to instrument
+
+| Milestone | Evidence to collect | Status |
+|---|---|---|
+| Java Activity launch | Logcat Activity lifecycle | Menu launch confirmed; engine launch absent |
+| Engine library load | linker log + ABI + loaded library path | Missing/incompatible runtime in repo |
+| JNI binding | resolved Java native symbol / native registration | Unverified |
+| Service/assets ready | service callback + OBB extraction completion | Unverified in current source |
+| Surface available | Surface validity, dimensions, lifecycle timestamp | callbacks currently empty |
+| Graphics startup | native return/log, EGL config/context, GL vendor/version | Unverified |
+| Game startup | arguments and native startup result | Arguments/call site unknown |
+| First render | frame counter / render log | Not observed |
+| Presentation | swap/present result and visible output | Not observed |
+
+Do not assume the graphics startup JNI call precedes game startup; this order is a test hypothesis. Do not invent the two string arguments or boolean flag. The native library is reported as 32-bit ARM, so Quest 3 arm64 execution remains a separate ABI/build blocker.
+
+### Current conclusion
+
+We can identify the Java-side JNI boundary but cannot yet name or map the original native implementation addresses or prove the first-frame call order. The next evidence-bearing step is to obtain a compatible engine build or a captured launch trace from the matching original client and instrument the milestones above. A Java-only mock Surface or fake render loop would validate our wrapper lifecycle, not the original Roblox first-frame path.
